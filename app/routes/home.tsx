@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Hero } from "../components/Hero";
+import { WhyChooseUs } from "../components/WhyChooseUs";
 import { Services } from "../components/Services";
 import { Process } from "../components/Process";
 import { CTA } from "../components/CTA";
@@ -26,6 +27,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+  <WhyChooseUs />
       <Services />
       <Process />
       <CTA />

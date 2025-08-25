@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Quicksand", "Nunito Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Global font feature defaults for Nunito Sans variable */
+body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100, "YTLC" 500;
 }
 
 html,

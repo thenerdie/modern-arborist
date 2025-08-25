@@ -2,8 +2,8 @@ import React from "react";
 
 const steps = [
   {
-    title: "Consultation",
-    text: "On‑site assessment by a certified arborist to understand goals and tree health.",
+    title: "Initial Free Consultation",
+    text: "On‑site assessment by a certified arborist to understand come up with a solution tailored to your needs.",
   },
   {
     title: "Plan & Proposal",
@@ -25,12 +25,12 @@ export function Process() {
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-base font-semibold leading-7 text-green-600">How it works</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Our Process</p>
+          <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Our Simple 4-Step Process</p>
         </div>
         <ol className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
-            <li key={s.title} className="relative pl-8">
-              <span className="absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white font-semibold">
+            <li key={s.title} className="relative pl-10">
+              <span className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white font-semibold">
                 {i + 1}
               </span>
               <h3 className="text-lg font-semibold mt-2">{s.title}</h3>
