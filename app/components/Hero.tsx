@@ -16,7 +16,7 @@ export function Hero() {
       />
       {/* Darkened overlay gradient for legibility */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-green-950/95 via-emerald-950/70 to-teal-900/90" />
-  <div className="mx-auto max-w-7xl px-6 py-28 flex flex-col items-center text-center">
+      <div className="mx-auto max-w-7xl px-6 py-28 flex flex-col items-center text-center">
         <img
           src="/logo.png"
           alt="Modern Arborist Logo"

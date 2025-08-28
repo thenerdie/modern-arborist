@@ -28,6 +28,22 @@ npm install
 
 Start the development server with HMR:
 
+### Google Reviews (Optional)
+
+To show live Google reviews:
+
+1. Enable the Places API in your Google Cloud project.
+2. Create an API key restricted to the Places API.
+3. Find your Place ID using the [Place ID finder](https://developers.google.com/maps/documentation/javascript/place-id).
+4. Create a `.env` file (or set environment variables in your hosting platform):
+
+```
+GOOGLE_PLACES_API_KEY=YOUR_KEY
+GOOGLE_PLACE_ID=YOUR_PLACE_ID
+```
+
+The home page loader will fetch up to 10 recent reviews every 30 minutes and cache them in memory. If the variables are missing or the request fails, a small set of sample reviews is shown.
+
 ```bash
 npm run dev
 ```

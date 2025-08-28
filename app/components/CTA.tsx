@@ -19,10 +19,10 @@ export function CTA() {
               Email Us
             </a>
             <a
-              href="tel:+15551234567"
+              href="tel:+14077978063"
               className="rounded-md bg-white dark:bg-gray-900 px-8 py-4 text-sm font-semibold text-green-700 dark:text-green-400 ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
-              Call (555) 123-4567
+              Call (407) 797-8063
             </a>
           </div>
           <p className="mt-6 text-xs text-gray-500 dark:text-gray-500">
