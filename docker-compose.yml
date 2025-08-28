@@ -4,7 +4,6 @@ services:
     build:
       context: .
       target: development-dependencies-env
-    container_name: modern-arborist-dev
     command: npm run dev
     working_dir: /app
     ports:
@@ -21,7 +20,6 @@ services:
     build:
       context: .
       # Final Dockerfile stage is production runtime by default.
-    container_name: modern-arborist-prod
     command: npm run start
     working_dir: /app
     ports:
