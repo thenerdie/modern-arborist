@@ -1,6 +1,7 @@
 services:
   dev:
     # Uses the stage with all dev deps installed.
+    profiles: [dev]
     build:
       context: .
       target: development-dependencies-env
@@ -17,6 +18,7 @@ services:
     # restart: unless-stopped
 
   prod:
+    profiles: [prod]
     build:
       context: .
       # Final Dockerfile stage is production runtime by default.
