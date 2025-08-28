@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  dev:
+    # Uses the stage with all dev deps installed.
+    build:
+      context: .
+      target: development-dependencies-env
+    command: npm run dev
+    working_dir: /app
+    ports:
+      # If the dev server uses a different port (e.g. 5173 for Vite), change both sides.
+      - "3000:3000"
+    volumes:
+      # Mount source for live reload / HMR.
+      - .:/app
+    environment:
+      NODE_ENV: development
+    # restart: unless-stopped
+
+  prod:
+    build:
+      context: .
+      # Final Dockerfile stage is production runtime by default.
+    command: npm run start
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    # restart: unless-stopped
