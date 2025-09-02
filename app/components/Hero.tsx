@@ -1,4 +1,4 @@
-import React from "react";
+import { motion } from "motion/react"
 
 export function Hero() {
   return (
@@ -17,19 +17,26 @@ export function Hero() {
       {/* Darkened overlay gradient for legibility */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-green-950/95 via-emerald-950/70 to-teal-900/90" />
       <div className="mx-auto max-w-7xl px-6 py-28 flex flex-col items-center text-center">
-        <img
+        <motion.img
           src="/logo.png"
           alt="Modern Arborist Logo"
           className="w-[420px] max-w-full h-auto drop-shadow-xl"
           loading="eager"
           decoding="async"
+          whileHover={{ scale: 1.3 }}
+          whileTap={{ scale: 0.95 }}
         />
-        <p className="mt-4 text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium leading-tight tracking-tight text-green-100 w-full md:whitespace-nowrap">
+        <motion.p
+          className="mt-4 text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium leading-tight tracking-tight text-green-100 w-full md:whitespace-nowrap"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           Expert tree care focused on <span className="text-emerald-300 font-semibold">health</span>, <span className="text-yellow-300 font-semibold">safety</span>, and <span className="text-lime-300 font-semibold">sustainability</span>.
-        </p>
+        </motion.p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <a
-            href="#contact"
+            href="/quote"
             className="rounded-md bg-white px-8 py-3 text-sm font-semibold text-green-800 shadow hover:bg-green-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Request a Quote
