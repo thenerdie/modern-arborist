@@ -13,8 +13,8 @@ function Logo() {
 
 const navLinks: { label: string; href: string }[] = [
 	{ label: "Services", href: "/services" },
-	{ label: "Process", href: "#process" },
-	{ label: "Contact", href: "#contact" },
+	{ label: "Our Mission", href: "/mission" },
+	{ label: "Get a Quote", href: "/quote" },
 ];
 
 function MobileNavbar() {
