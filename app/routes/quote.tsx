@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { animate, inView } from "motion";
+import { motion, animate, inView } from "motion/react";
 
 interface FieldProps {
   label: string;
@@ -153,14 +153,14 @@ export default function Quote() {
         <Field label="Name" type="text" name="name" value={formData.name} setFormData={setFormData} />
         <Field label="Email" type="email" name="email" value={formData.email} setFormData={setFormData} />
         <Field label="Quote Request Details" type="text" name="message" value={formData.message} setFormData={setFormData} isTextarea={true} placeholder="Please describe your tree care needs..." />
-        
-        <button
+
+        <motion.button
           type="submit"
           ref={buttonRef}
           aria-busy={submitting}
           disabled={submitting}
           onMouseEnter={() => {
-            if (buttonRef.current && !submitting) {
+            if (buttonRef.current && !submitting) { 
               animate(buttonRef.current, { transform: "scale(1.03)" }, { duration: 0.25, ease: "easeOut" });
             }
           }}
