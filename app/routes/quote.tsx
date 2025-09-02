@@ -174,7 +174,7 @@ export default function Quote() {
           }`}
         >
           {submitting ? "Submitting..." : "Submit Quote Request"}
-        </button>
+        </motion.button>
       </form>
     </section>
   );
