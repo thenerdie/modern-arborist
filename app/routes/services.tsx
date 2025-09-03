@@ -4,43 +4,32 @@ import { motion } from "motion/react";
 
 export default function Services() {
   return (
-    <div className="mx-auto px-6 py-20 space-y-32">
+    <div className="mx-auto px-6 space-y-32 bg-black">
       <motion.header
-        className="text-center h-[80vh]"
-        initial={{ opacity: 0, y: 20, scale: 0.9 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.2 }}
+        className="flex flex-col items-center justify-center text-center h-screen"
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2 }}
       >
         <h1
             className="text-6xl font-bold tracking-tight bg-gradient-to-r from-emerald-300 via-green-200 to-lime-200 bg-clip-text text-transparent"
         >
           Our Services
         </h1>
-        <p className="mt-6 text-2xl text-neutral-300">
+        <motion.p
+            whileHover={{ scale: 1.05 }}
+            className="mt-6 p-2 text-2xl bg-gradient-to-r from-emerald-800 via-green-800 to-lime-800 max-w-8xl"
+        >
           We deliver comprehensive, sustainable tree care combining science‑driven diagnostics with precision fieldwork.
-        </p>
+        </motion.p>
+        <p className="pt-10">This is what we do, and we're proud of it.</p>
+        <p className="animate-bounce absolute bottom-10 left-1/2 transform -translate-x-1/2 text-neutral-400">Scroll to learn more...</p>
       </motion.header>
 
       <ScrollAnimation
         heightMultiplier={3}
         render={(p) => (
-          <div className="relative w-full h-full bg-black flex items-center justify-center">
-            {/* Background layer with subtle zoom / pan */}
-            <video
-                aria-hidden
-                className="absolute inset-0 object-cover will-change-transform"
-                style={{
-                    transform: `scale(${1 + p * 0.35}) translateY(${p * -6}%)`,
-                    filter: `brightness(${1.05 - p * 0.15})`,
-                    transition: 'filter 0.2s linear',
-                }}
-                muted
-                loop
-                autoPlay
-            >
-                <source src="/movinglimb.mp4" type="video/mp4" />
-            </video>
-            {/* Gradient overlay that intensifies */}
+          <div className="relative w-full h-full bg-black flex">
             <div
               aria-hidden
               className="absolute inset-0 pointer-events-none will-change-opacity"
@@ -49,7 +38,7 @@ export default function Services() {
               }}
             />
             {/* Animated focal element */}
-            <div
+            <motion.div
               aria-hidden
               className="absolute left-1/2 top-1/2 w-40 h-40 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen will-change-transform will-change-opacity"
               style={{
@@ -59,24 +48,24 @@ export default function Services() {
               }}
             />
             {/* Text reveal */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center px-6">
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 px-6 py-90">
               <h2
                 className="text-4xl md:text-5xl font-bold text-white will-change-transform will-change-opacity"
                 style={{
-                  transform: `translateY(${(1 - p) * 40}px)`,
+                  transform: `translateY(${(1 - p) * 50}vh)`,
                   opacity: p,
                 }}
               >
-                Sustainable Tree Care
+                We love trees.
               </h2>
               <p
-                className="mt-4 max-w-xl text-white/80 mx-auto will-change-transform will-change-opacity"
+                className="text-xl mt-4 max-w-3xl text-white/80 mx-auto will-change-transform will-change-opacity"
                 style={{
-                  transform: `translateY(${(1 - p) * 60}px)`,
+                  transform: `translateY(${(1 - p) * 60}vh)`,
                   opacity: p * 0.9,
                 }}
               >
-                Precision pruning, proactive health management, and eco‑focused preservation.
+                Anything under the green sun is our forte. We'll precision prune, proactively manage health, and eco‑focus on preservation.
               </p>
             </div>
             <div className="absolute top-3 right-4 text-[10px] tracking-wide text-white/60 bg-black/40 px-2 py-1 rounded">
