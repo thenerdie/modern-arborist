@@ -71,7 +71,7 @@ export function Navbar() {
 				</div>
 				<div className="flex items-center gap-4">
 					<a
-						href="#contact"
+						href="/quote"
 						className="hidden sm:inline-flex rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-green-500 focus-visible:outline-offset-2 focus-visible:outline-green-600"
 					>
 						Get a Quote

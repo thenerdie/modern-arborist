@@ -55,7 +55,8 @@ export function ScrollAnimation({
   return (
     <div
       ref={wrapRef}
-      className={`relative [--progress:0] h-[${heightMultiplier * 100}vh] ${className}`}
+  className={`relative [--progress:0] ${className}`}
+  style={{ height: `${heightMultiplier * 100}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="w-full h-full">

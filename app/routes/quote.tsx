@@ -20,7 +20,7 @@ const Field = ({ label, type, name, value, setFormData, isTextarea = false, plac
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     animate(e.currentTarget, { transform: "scale(1.01)" }, { duration: 0.25, ease: "easeOut" });
-    containerRef.current && animate(containerRef.current, { scale: 1.1 }, { duration: 0.1, ease: "circIn" });
+    containerRef.current && animate(containerRef.current, { scale: 1.02 }, { duration: 0.1, ease: "circIn" });
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -145,9 +145,12 @@ export default function Quote() {
   }, []);
 
   return (
-  <section ref={sectionRef} className="max-w-2xl mx-auto px-6 py-12 opacity-0" style={{ transform: "translateY(24px)" }}>
-      <h1 className="text-4xl font-bold text-center mb-8">Request a Quote</h1>
-      <h1 className="text-lg text-center mb-4 text-red-300">We'll return your message within one business day. ⚡</h1>
+    <section
+      ref={sectionRef}
+      className="max-w-2xl mx-auto px-6 py-12 opacity-0"
+    >
+      <h1 className="md:text-4xl text-2xl font-bold text-center mb-2">We're so happy you're choosing us.</h1>
+      <h1 className="md:text-xl text-md text-center mb-4 text-red-200">We'll return your message within one business day.</h1>
       <hr className="my-8 border-gray-300" />
       <form onSubmit={handleSubmit} className="space-y-6">
         <Field label="Name" type="text" name="name" value={formData.name} setFormData={setFormData} />
@@ -173,7 +176,7 @@ export default function Quote() {
             submitting ? "bg-gray-600" : "bg-green-600 hover:bg-green-700"
           }`}
         >
-          {submitting ? "Submitting..." : "Submit Quote Request"}
+          {submitting ? "Submitting..." : "Let's connect!"}
         </motion.button>
       </form>
     </section>
