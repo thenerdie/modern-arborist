@@ -42,7 +42,7 @@ export function Hero() {
             Request a Quote
           </a>
           <a
-            href="#services"
+            href="/services"
             className="text-sm font-semibold leading-6 text-green-100 hover:text-white"
           >
             Our Services <span aria-hidden="true">→</span>
