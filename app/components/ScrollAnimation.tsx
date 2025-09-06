@@ -1,4 +1,27 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
+import { useMotionValue } from "motion/react";
+
+import type { MotionValue } from "motion/react";
+
+const ScrollProgressContext = React.createContext<MotionValue<number> | null>(
+  null
+);
+
+export function useScrollProgress(): MotionValue<number> {
+  const ctx = useContext(ScrollProgressContext);
+  if (!ctx) {
+    // Fallback MV for cases where the hook is used outside provider
+    const mv = useMotionValue(0);
+    return mv;
+  }
+  return ctx;
+}
 
 interface ScrollAnimationProps {
   /** How many viewport heights tall the scrolling container should be */
@@ -9,6 +32,8 @@ interface ScrollAnimationProps {
   className?: string;
   /** Optional fallback node for prefers-reduced-motion */
   reducedMotionFallback?: React.ReactNode;
+  /** If true, mirror progress to CSS var `--progress` */
+  exposeCssVar?: boolean;
 }
 
 /**
@@ -20,10 +45,12 @@ export function ScrollAnimation({
   render,
   className = "",
   reducedMotionFallback,
+  exposeCssVar = false,
 }: ScrollAnimationProps) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(0);
   const progressRef = useRef(0);
+  const progressMV = useMotionValue(0);
 
   const update = useCallback(() => {
     const el = wrapRef.current;
@@ -33,7 +60,10 @@ export function ScrollAnimation({
     const totalScrollable = rect.height - vh;
     const scrolled = Math.min(Math.max(-rect.top, 0), totalScrollable);
     const p = totalScrollable > 0 ? scrolled / totalScrollable : 0;
-    el.style.setProperty("--progress", p.toString());
+    if (exposeCssVar) {
+      el.style.setProperty("--progress", p.toString());
+    }
+    progressMV.set(p);
     // only re-render if meaningful change
     if (Math.abs(p - progressRef.current) > 0.001) {
       progressRef.current = p;
@@ -55,13 +85,13 @@ export function ScrollAnimation({
   return (
     <div
       ref={wrapRef}
-  className={`relative [--progress:0] ${className}`}
-  style={{ height: `${heightMultiplier * 100}vh` }}
+      className={`relative ${className}`}
+      style={{ height: `${heightMultiplier * 100}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="w-full h-full">
-          {render(progress)}
-        </div>
+        <ScrollProgressContext.Provider value={progressMV}>
+          <div className="w-full h-full">{render(progress)}</div>
+        </ScrollProgressContext.Provider>
       </div>
       {reducedMotionFallback && (
         <div className="hidden motion-reduce:block sticky top-0 h-screen">
