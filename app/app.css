@@ -3,6 +3,7 @@
 @theme {
   --font-sans: "Quicksand", "Nunito Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-royal: "Bonheur Royale", var(--font-sans);
 }
 
 /* Global font feature defaults for Nunito Sans variable */

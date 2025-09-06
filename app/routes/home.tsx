@@ -6,6 +6,7 @@ import { Process } from "../components/Process";
 import { CTA } from "../components/CTA";
 import { Footer } from "../components/Footer";
 import { Reviews } from "../components/Reviews";
+import { MissionStatement } from "~/components/MissionStatement";
 import type { Review } from "../components/Reviews";
 import { useLoaderData } from "react-router";
 
@@ -106,6 +107,7 @@ export default function Home() {
     <>
       <Hero />
       <WhyChooseUs />
+      <MissionStatement />
       <Reviews reviews={reviews} />
       <Services />
       <Process />

@@ -13,13 +13,13 @@ export default function Services() {
         transition={{ duration: 2 }}
       >
         <h1
-            className="md:text-6xl text-5xl font-bold tracking-tight bg-gradient-to-r from-emerald-300 via-green-200 to-lime-200 bg-clip-text text-transparent"
+            className="md:text-6xl text-4xl font-bold tracking-tight pb-2 bg-gradient-to-r from-emerald-300 via-green-200 to-lime-200 bg-clip-text text-transparent"
         >
-          Our Services
+          Tree care that's tailored to you.
         </h1>
         <motion.p
             whileHover={{ scale: 1.05 }}
-            className="mt-6 p-2 md:text-2xl text-xl bg-gradient-to-r bg-clip-text text-transparent from-emerald-500 via-yellow-800 to-purple-800 max-w-8xl"
+            className="mt-6 p-2 md:text-2xl text-md bg-gradient-to-r bg-clip-text text-transparent from-emerald-500 via-yellow-800 to-purple-800 max-w-8xl"
         >
           We deliver comprehensive, sustainable tree care combining science‑driven diagnostics with precision fieldwork.
         </motion.p>
