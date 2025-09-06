@@ -4,16 +4,19 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: "Quicksand", "Nunito Sans", ui-sans-serif, system-ui, sans-serif,
+  --font-sans:
+    "Quicksand", "Nunito Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-royal: "Bonheur Royale", var(--font-sans);
+  --font-royal: "Bonheur Royale", var(--font-sans);
 }
 
 /* Global font feature defaults for Nunito Sans variable */
 body {
   font-family: var(--font-sans);
   font-optical-sizing: auto;
-  font-variation-settings: "wdth" 100, "YTLC" 500;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
 }
 
 html,
@@ -26,8 +29,12 @@ body {
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @theme inline {
@@ -145,4 +152,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-

@@ -18,23 +18,46 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.gstatic.com",
     crossOrigin: "anonymous",
   },
-  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Quicksand:wght@300..700&display=swap" },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Quicksand:wght@300..700&display=swap",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="dark light" />
+        {/* Apply theme class before paint to avoid FOUC and match system preference or persisted choice */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var root = document.documentElement;
+                  var persisted = localStorage.getItem('theme');
+                  var mql = window.matchMedia('(prefers-color-scheme: dark)');
+                  var dark = persisted === 'dark' || (persisted !== 'light' && mql.matches);
+                  if (dark) root.classList.add('dark'); else root.classList.remove('dark');
+                  root.style.colorScheme = dark ? 'dark' : 'light';
+                } catch (_) { /* no-op */ }
+              })();
+            `,
+          }}
+        />
         <Meta />
         <Links />
       </head>
       <body>
-  <Navbar />
-  <div className="pt-16">{children}</div>
+        <Navbar />
+        <div className="pt-16">{children}</div>
         <ScrollRestoration />
         <Scripts />
+        {/* Keep theme in sync if the OS preference changes at runtime */}
+        <script src="/theme-listener.js" />
       </body>
     </html>
   );

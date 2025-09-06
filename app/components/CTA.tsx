@@ -1,5 +1,3 @@
-import React from "react";
-
 export function CTA() {
   return (
     <section id="contact" className="relative isolate overflow-hidden">
@@ -9,7 +7,8 @@ export function CTA() {
             Ready to protect and enhance your trees?
           </h2>
           <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-300">
-            Request a consultation and get a tailored tree care plan from a certified professional.
+            Request a consultation and get a tailored tree care plan from a
+            certified professional.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <a
