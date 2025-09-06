@@ -32,6 +32,115 @@ function Section({
   );
 }
 
+function CertificationBadge({
+  title,
+  image,
+}: {
+  title: string;
+  image: string;
+}) {
+  return (
+    <div className="flex flex-col items-center space-x-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+      <img src={image} alt={title} className="h-40 w-auto pb-2" />
+      <b className="text-lg font-semibold">{title}</b>
+    </div>
+  );
+}
+
+function PreservationSection() {
+  return (
+    <Section className="text-left bg-blue-500 dark:bg-blue-900" height={4}>
+      {(p) => {
+        return (
+          <>
+            {/* Tiled grass strip pinned to bottom, repeating along X, parallax with progress */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-16 md:h-24"
+              style={{
+                backgroundImage: "url('/services/grass.png')",
+                backgroundRepeat: "repeat-x",
+                backgroundPosition: `${-Math.round(p * 200)}px 100%`,
+                backgroundSize: "auto 700%",
+              }}
+            />
+            <img
+              src="/services/sun.png"
+              alt="A healthy tree"
+              className="absolute inset-0 object-cover w-60 h-60 will-change-transform"
+              style={{
+                transform: `translate(${p * 100}vw, ${Math.cos(toRadians(p * 360)) * 100}px) translateX(-50%) translateY(30vh)`,
+              }}
+            />
+            <div
+              className="relative z-10 max-w-4xl space-y-2 will-change-transform"
+              style={{
+                transform: "translateY(calc(-50% + var(--progress) * 50%))",
+                opacity: `${inverseLerp(0, 0.2, p)}`,
+              }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-white text-shadow-lg">
+                We love trees.
+              </h2>
+              <p className="text-base sm:text-lg text-white/80 leading-relaxed text-shadow-xs">
+                We precision prune, proactively manage health, and eco‑focus on
+                preservation.
+              </p>
+              <b
+                className="text-green-200"
+                style={{ opacity: inverseLerp(0.5, 0.9, p) }}
+              >
+                Removal is never our first choice. We will always prioritize
+                tree health and preservation before destruction.
+              </b>
+            </div>
+          </>
+        );
+      }}
+    </Section>
+  );
+}
+
+function CertificationsSection() {
+  return (
+    <Section
+      className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-shadow-lg"
+      height={5}
+    >
+      {(p) => (
+        <>
+          <div
+            className="relative z-10 max-w-3xl space-y-6 will-change-transform"
+            style={{
+              opacity: `${inverseLerp(0, 0.3, p)}`,
+            }}
+          >
+            <h2
+              className="text-left text-6xl md:text-8xl font-bold text-green-800 dark:text-green-300"
+              style={{
+                opacity: `${Math.min(1, p * 2)}`,
+                rotate: `${inverseLerp(0, 0.3, p) * 360}deg`,
+              }}
+            >
+              We're certified.
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 pt-10">
+              <CertificationBadge
+                title="ISA Certified Arborists"
+                image="/services/isa.png"
+              />
+              <CertificationBadge
+                title="TRAQ Qualified"
+                image="/services/traq_t.png"
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </Section>
+  );
+}
+
 export default function Services() {
   return (
     <div className="mx-auto bg-white dark:bg-black">
@@ -57,82 +166,8 @@ export default function Services() {
         </p>
       </motion.header>
 
-      <Section className="text-left bg-blue-500 dark:bg-blue-900" height={4}>
-        {(p) => {
-          return (
-            <>
-              {/* Tiled grass strip pinned to bottom, repeating along X, parallax with progress */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-16 md:h-24"
-                style={{
-                  backgroundImage: "url('/services/grass.png')",
-                  backgroundRepeat: "repeat-x",
-                  backgroundPosition: `${-Math.round(p * 200)}px 100%`,
-                  backgroundSize: "auto 700%",
-                }}
-              />
-              <img
-                src="/services/sun.png"
-                alt="A healthy tree"
-                className="absolute inset-0 object-cover w-60 h-60 will-change-transform"
-                style={{
-                  transform: `translate(${p * 100}vw, ${Math.cos(toRadians(p * 360)) * 100}px) translateX(-50%) translateY(30vh)`,
-                }}
-              />
-              <div
-                className="relative z-10 max-w-4xl space-y-2 will-change-transform"
-                style={{
-                  transform: "translateY(calc(-50% + var(--progress) * 50%))",
-                  opacity: `${inverseLerp(0, 0.2, p)}`,
-                }}
-              >
-                <h2 className="text-4xl md:text-5xl font-bold text-white text-shadow-lg">
-                  We love trees.
-                </h2>
-                <p className="text-base sm:text-lg text-white/80 leading-relaxed text-shadow-xs">
-                  We precision prune, proactively manage health, and eco‑focus
-                  on preservation.
-                </p>
-                <b
-                  className="text-green-200"
-                  style={{ opacity: inverseLerp(0.5, 0.9, p) }}
-                >
-                  Removal is never our first choice. We will always prioritize
-                  tree health and preservation before destruction.
-                </b>
-              </div>
-            </>
-          );
-        }}
-      </Section>
-
-      <Section className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-shadow-lg">
-        {(p) => (
-          <>
-            <div
-              className="relative z-10 max-w-3xl space-y-6 will-change-transform"
-              style={{
-                transform: "translateY(calc(-50% + var(--progress) * 50%))",
-                opacity: `${Math.min(1, p * 2)}`,
-              }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-green-800 dark:text-green-300">
-                Our services
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-lg sm:text-xl leading-relaxed">
-                <li>Tree Pruning & Trimming</li>
-                <li>Tree Removal & Stump Grinding</li>
-                <li>Tree Health Assessments & Diagnostics</li>
-                <li>Integrated Pest Management (IPM)</li>
-                <li>Cabling & Bracing for Structural Support</li>
-                <li>Emergency Tree Services</li>
-                <li>Consultation & Customized Tree Care Plans</li>
-              </ul>
-            </div>
-          </>
-        )}
-      </Section>
+      <PreservationSection />
+      <CertificationsSection />
     </div>
   );
 }
