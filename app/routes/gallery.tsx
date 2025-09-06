@@ -13,10 +13,11 @@ export default function Gallery() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-green-300 to-lime-300">
-          Our Work, In Focus
+          Oh, much to show!
         </h1>
         <p className="mt-3 text-neutral-600 dark:text-neutral-300">
-          A selection of recent projects and snapshots from the field.
+          A selection of recent (and not-so-recent) projects and snapshots from
+          the field.
         </p>
       </motion.header>
 
