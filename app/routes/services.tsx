@@ -3,6 +3,14 @@ import ScrollAnimation from "../components/ScrollAnimation";
 import { motion } from "motion/react";
 import React from "react";
 
+function Section({ className, children }: { children: React.ReactNode, className?: string }) {
+  return (
+  <div className={`relative overflow-hidden flex items-center justify-center min-h-screen px-6 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
 export default function Services() {
   return (
     <div className="mx-auto px-6 space-y-32 bg-black">
@@ -27,14 +35,25 @@ export default function Services() {
         <p className="animate-bounce absolute bottom-[1vh] left-1/2 transform -translate-x-1/2 text-neutral-400">Scroll to learn more...</p>
       </motion.header>
 
-      <div className="flex items-center justify-center min-h-screen px-6 text-left">
-        <div className="max-w-3xl space-y-6">
+      <Section className="text-left">
+        {/* Tiled grass strip pinned to bottom, repeating along X */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 md:h-24"
+          style={{
+            backgroundImage: "url('/services/grass.png')",
+            backgroundRepeat: 'repeat-x',
+            backgroundPosition: 'bottom center',
+            backgroundSize: 'auto 400%',
+          }}
+        />
+        <div className="relative z-10 max-w-3xl space-y-6">
           <h2 className="text-4xl md:text-5xl font-bold text-white">We love trees.</h2>
           <p className="text-base sm:text-lg text-white/80 leading-relaxed">
-            Anything green under the sun is our forte—except grass. We precision prune, proactively manage health, and eco‑focus on preservation.
+        Anything green under the sun is our forte—except grass. We precision prune, proactively manage health, and eco‑focus on preservation.
           </p>
         </div>
-      </div>
+      </Section>
     </div>
   );
 }
