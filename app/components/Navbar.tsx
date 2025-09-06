@@ -28,14 +28,14 @@ function MobileNavbar() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="md:hidden absolute drop-shadow-md left-1/2 top-full z-10 mt-2 w-[80vw] -translate-x-1/2 rounded-md text-green-200 font-extrabold dark:bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      className="md:hidden absolute drop-shadow-md left-1/2 top-full z-10 mt-2 w-[80vw] -translate-x-1/2 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-semibold shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none"
     >
       <div className="py-1">
         {navLinks.map((link) => (
           <motion.a
             key={link.href}
             href={link.href}
-            className="block px-4 py-2 text-sm"
+            className="block px-4 py-2 text-sm hover:text-green-700 dark:hover:text-green-300"
             whileTap={{}}
           >
             {link.label}
@@ -64,7 +64,7 @@ export function Navbar() {
             <motion.a
               key={l.href}
               href={l.href}
-              className={`text-sm text-gray-700 dark:text-gray-300 hover:text-green-200 dark:hover:text-blue-300 ${
+              className={`text-sm text-gray-700 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-300 ${
                 location.pathname === l.href
                   ? "text-green-700 dark:text-green-400 font-bold"
                   : "font-medium"

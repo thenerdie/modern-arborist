@@ -6,31 +6,68 @@ interface FieldProps {
   type: string;
   name: string;
   value: string;
-  setFormData: React.Dispatch<React.SetStateAction<{ name: string; email: string; message: string; }>>;
+  setFormData: React.Dispatch<
+    React.SetStateAction<{ name: string; email: string; message: string }>
+  >;
   isTextarea?: boolean;
   placeholder?: string;
 }
 
-const Field = ({ label, type, name, value, setFormData, isTextarea = false, placeholder }: FieldProps) => {
+const Field = ({
+  label,
+  type,
+  name,
+  value,
+  setFormData,
+  isTextarea = false,
+  placeholder,
+}: FieldProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [name]: e.target.value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    animate(e.currentTarget, { transform: "scale(1.01)" }, { duration: 0.25, ease: "easeOut" });
-    containerRef.current && animate(containerRef.current, { scale: 1.02 }, { duration: 0.1, ease: "circIn" });
+  const handleFocus = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    animate(
+      e.currentTarget,
+      { transform: "scale(1.01)" },
+      { duration: 0.25, ease: "easeOut" }
+    );
+    containerRef.current &&
+      animate(
+        containerRef.current,
+        { scale: 1.02 },
+        { duration: 0.1, ease: "circIn" }
+      );
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    animate(e.currentTarget, { transform: "scale(1)" }, { duration: 0.2, ease: "easeOut" });
-    containerRef.current && animate(containerRef.current, { scale: 1 }, { duration: 0.2, ease: "easeOut" });
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    animate(
+      e.currentTarget,
+      { transform: "scale(1)" },
+      { duration: 0.2, ease: "easeOut" }
+    );
+    containerRef.current &&
+      animate(
+        containerRef.current,
+        { scale: 1 },
+        { duration: 0.2, ease: "easeOut" }
+      );
   };
 
   return (
     <div ref={containerRef}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+      >
         {label}
       </label>
       {isTextarea ? (
@@ -45,7 +82,7 @@ const Field = ({ label, type, name, value, setFormData, isTextarea = false, plac
           placeholder={placeholder}
           required
           data-animate-field
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-0 focus:border-green-500 bg-gray-900 opacity-0"
+          className="mt-1 block w-full px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500/60 focus:ring-offset-0 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 opacity-0"
           style={{ transform: "translateY(12px)" }}
         />
       ) : (
@@ -59,13 +96,13 @@ const Field = ({ label, type, name, value, setFormData, isTextarea = false, plac
           onBlur={handleBlur}
           required
           data-animate-field
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-0 focus:border-green-500 bg-gray-900 opacity-0"
+          className="mt-1 block w-full px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500/60 focus:ring-offset-0 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 opacity-0"
           style={{ transform: "translateY(12px)" }}
         />
       )}
     </div>
   );
-}
+};
 
 export default function Quote() {
   const [formData, setFormData] = useState({
@@ -88,10 +125,15 @@ export default function Quote() {
       loadingAnimRef.current = animate(
         buttonRef.current,
         { transform: "scale(1.04)" },
-        { duration: 0.45, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }
+        {
+          duration: 0.45,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "reverse",
+        }
       );
     }
-    
+
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setSubmitting(false);
 
@@ -106,7 +148,9 @@ export default function Quote() {
       );
     }
 
-    alert(`Thank you for your quote request, ${formData.name}! You will receive a confirmation email at ${formData.email}. We'll get back to you soon.`);
+    alert(
+      `Thank you for your quote request, ${formData.name}! You will receive a confirmation email at ${formData.email}. We'll get back to you soon.`
+    );
 
     setFormData({
       name: "",
@@ -149,13 +193,37 @@ export default function Quote() {
       ref={sectionRef}
       className="max-w-2xl mx-auto px-6 py-12 opacity-0"
     >
-      <h1 className="md:text-4xl text-2xl font-bold text-center mb-2">We're so happy you're choosing us.</h1>
-      <h1 className="md:text-xl text-md text-center mb-4 text-red-200">We'll return your message within one business day.</h1>
-      <hr className="my-8 border-gray-300" />
+      <h1 className="md:text-4xl text-2xl font-bold text-center mb-2">
+        We're so happy you're choosing us.
+      </h1>
+      <h1 className="md:text-xl text-md text-center mb-4 text-emerald-700 dark:text-emerald-300">
+        We'll return your message within one business day.
+      </h1>
+      <hr className="my-8 border-gray-300 dark:border-gray-800" />
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Field label="Name" type="text" name="name" value={formData.name} setFormData={setFormData} />
-        <Field label="Email" type="email" name="email" value={formData.email} setFormData={setFormData} />
-        <Field label="Quote Request Details" type="text" name="message" value={formData.message} setFormData={setFormData} isTextarea={true} placeholder="Please describe your tree care needs..." />
+        <Field
+          label="Name"
+          type="text"
+          name="name"
+          value={formData.name}
+          setFormData={setFormData}
+        />
+        <Field
+          label="Email"
+          type="email"
+          name="email"
+          value={formData.email}
+          setFormData={setFormData}
+        />
+        <Field
+          label="Quote Request Details"
+          type="text"
+          name="message"
+          value={formData.message}
+          setFormData={setFormData}
+          isTextarea={true}
+          placeholder="Please describe your tree care needs..."
+        />
 
         <motion.button
           type="submit"
@@ -163,13 +231,21 @@ export default function Quote() {
           aria-busy={submitting}
           disabled={submitting}
           onMouseEnter={() => {
-            if (buttonRef.current && !submitting) { 
-              animate(buttonRef.current, { transform: "scale(1.03)" }, { duration: 0.25, ease: "easeOut" });
+            if (buttonRef.current && !submitting) {
+              animate(
+                buttonRef.current,
+                { transform: "scale(1.03)" },
+                { duration: 0.25, ease: "easeOut" }
+              );
             }
           }}
           onMouseLeave={() => {
             if (buttonRef.current && !submitting) {
-              animate(buttonRef.current, { transform: "scale(1)" }, { duration: 0.25, ease: "easeOut" });
+              animate(
+                buttonRef.current,
+                { transform: "scale(1)" },
+                { duration: 0.25, ease: "easeOut" }
+              );
             }
           }}
           className={`w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-white transition-colors disabled:opacity-80 disabled:cursor-not-allowed ${

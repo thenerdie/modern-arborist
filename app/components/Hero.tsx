@@ -1,4 +1,4 @@
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
 export function Hero() {
   return (
@@ -32,12 +32,15 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Expert tree care focused on <span className="text-emerald-300 font-semibold">health</span>, <span className="text-yellow-300 font-semibold">safety</span>, and <span className="text-lime-300 font-semibold">sustainability</span>.
+          Expert tree care focused on{" "}
+          <span className="text-emerald-300 font-semibold">health</span>,{" "}
+          <span className="text-yellow-300 font-semibold">safety</span>, and{" "}
+          <span className="text-lime-300 font-semibold">sustainability</span>.
         </motion.p>
         <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <a
             href="/quote"
-            className="rounded-md bg-white px-8 py-3 text-sm font-semibold text-green-800 shadow hover:bg-green-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-md bg-white text-green-800 dark:bg-emerald-600 dark:text-white px-8 py-3 text-sm font-semibold shadow hover:bg-green-50 dark:hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Request a Quote
           </a>

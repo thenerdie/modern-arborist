@@ -24,8 +24,12 @@ export function Process() {
     <section className="bg-gray-50 dark:bg-gray-950/40 border-y border-gray-200 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-green-600">How it works</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Our Simple 4-Step Process</p>
+          <h2 className="text-base font-semibold leading-7 text-green-600 dark:text-green-400">
+            How it works
+          </h2>
+          <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl text-gray-900 dark:text-gray-100">
+            Our Simple 4-Step Process
+          </p>
         </div>
         <ol className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
@@ -33,8 +37,12 @@ export function Process() {
               <span className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-white font-semibold">
                 {i + 1}
               </span>
-              <h3 className="text-lg font-semibold mt-2">{s.title}</h3>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{s.text}</p>
+              <h3 className="text-lg font-semibold mt-2 text-gray-900 dark:text-gray-100">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                {s.text}
+              </p>
             </li>
           ))}
         </ol>

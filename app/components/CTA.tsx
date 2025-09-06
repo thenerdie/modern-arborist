@@ -13,7 +13,7 @@ export function CTA() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="mailto:info@modernarborist.example"
-              className="rounded-md bg-green-600 px-8 py-4 text-sm font-semibold text-white shadow hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              className="rounded-md bg-green-600 px-8 py-4 text-sm font-semibold text-white shadow hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
               Email Us
             </a>
