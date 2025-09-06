@@ -3,7 +3,7 @@ import ScrollAnimation, {
 } from "../components/ScrollAnimation";
 
 import { motion, useTransform } from "motion/react";
-import React from "react";
+import React, { useState } from "react";
 
 import { toRadians } from "~/utils/math";
 
@@ -37,15 +37,45 @@ function Section({
 function CertificationBadge({
   title,
   image,
+  className,
 }: {
   title: string;
   image: string;
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col items-center space-x-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-      <img src={image} alt={title} className="h-40 w-auto pb-2" />
-      <b className="text-lg font-semibold">{title}</b>
-    </div>
+    <motion.div
+      whileHover={{ y: -4, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 260, damping: 18 }}
+      className="relative isolate group flex flex-col items-center text-center rounded-2xl p-5 md:p-6 shadow-xl ring-1 ring-black/5 dark:ring-white/10 bg-gradient-to-br from-white/80 via-white/70 to-emerald-50/60 dark:from-gray-900/60 dark:via-gray-900/40 dark:to-emerald-900/20 backdrop-blur-md"
+      aria-label={title}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-px rounded-2xl bg-[radial-gradient(50%_50%_at_50%_0%,rgba(16,185,129,0.22),transparent_70%)] opacity-60 group-hover:opacity-90 transition-opacity"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-6 -top-1 h-1/3 rounded-full bg-gradient-to-b from-white/40 to-transparent dark:from-white/10"
+      />
+
+      <motion.img
+        src={image}
+        alt={title}
+        className={`h-28 md:h-32 w-auto rounded-md shadow-lg mb-3 md:mb-4 object-contain ${
+          className || ""
+        }`}
+        initial={{ filter: "saturate(0.9)" }}
+        whileHover={{ filter: "saturate(1.05)" }}
+      />
+      <div className="relative z-[1]">
+        <h3 className="text-base md:text-lg font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-700 dark:from-emerald-200 dark:via-green-200 dark:to-lime-200">
+          {title}
+        </h3>
+        <div className="mt-1 h-px w-10 mx-auto bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent dark:via-emerald-300/40" />
+      </div>
+    </motion.div>
   );
 }
 
@@ -59,7 +89,7 @@ function PreservationSection() {
 
 function TreeRemovalSection() {
   return (
-    <Section className="text-left bg-red-500 dark:bg-red-900" height={4}>
+    <Section className="text-left bg-red-800 dark:bg-red-900" height={4}>
       {() => <TreeRemovalContent />}
     </Section>
   );
@@ -139,24 +169,67 @@ function TreeRemovalContent() {
   const containerTransform = useTransform(
     p,
     [0, 1],
-    ["translateY(-50%)", "translateY(0%)"]
+    ["translateX(-50%)", "translateX(0%)"]
   );
   const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
   const emphasisOpacity = useTransform(p, [0.5, 0.9], [0, 1]);
 
+  const TEXTS = [
+    "You can't save them all.",
+    "In some cases, removal is necessary.",
+    "It is what it is.",
+    "Safety first, always.",
+    "When removal is the only option.",
+    "Expert tree removal services.",
+    "Protecting property and safety.",
+    "Responsible and efficient.",
+    "Certified professionals at work.",
+    "Careful assessment before action.",
+    "Minimizing environmental impact.",
+    "Your safety is our priority.",
+    "Trust the experts.",
+    "We handle it with care.",
+    "Precision and professionalism.",
+    "Committed to safety and quality.",
+    "Tree removal done right.",
+    "When trees must come down.",
+    "We make tough calls.",
+    "Balancing safety and nature.",
+    "Your property, our responsibility.",
+    "Removing risk, preserving peace of mind.",
+    "Expertise you can trust.",
+    "Safety, efficiency, responsibility.",
+    "When it's time to say goodbye.",
+    "Professional tree removal services.",
+    "Caring for your trees, even in removal.",
+    "We assess, we decide, we act.",
+    "Tree removal with care and precision.",
+    "Your safety, our mission.",
+    "Handling tree removal with expertise.",
+    "When safety is non-negotiable.",
+    "We prioritize your safety.",
+  ];
+
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
   return (
     <motion.div
       className="relative z-10 max-w-4xl space-y-8 will-change-transform"
-      style={{ transform: containerTransform, opacity: containerOpacity }}
+      style={{ opacity: containerOpacity }}
     >
       <motion.h2
         className="text-4xl md:text-5xl font-bold text-white text-shadow-lg"
         whileHover={{
           x: [0, -5, 5, -5, 5, 0, 0, -5, 5, -5, 5, 0],
+          y: [0, -2, 2, -2, 2, 0, 0, -2, 2, -2, 2, 0],
+          color: ["#ffffff", "#ffaaaa", "#ffffff"],
           transition: { duration: 0.2 },
         }}
+        onHoverStart={() => {
+          setCurrentTextIndex((currentTextIndex + 1) % TEXTS.length);
+        }}
       >
-        You can't save them all.
+        {TEXTS[currentTextIndex]}
       </motion.h2>
       <p className="text-base sm:text-xl text-white/80 leading-relaxed text-shadow-xs">
         In cases where a tree poses a significant risk to property, safety, or
@@ -182,32 +255,38 @@ function TreeRemovalContent() {
 
 function CertificationsContent() {
   const p = useScrollProgress();
-  const containerOpacity = useTransform(p, [0, 0.3], [0, 1]);
+  const containerOpacity = useTransform(p, [0.5, 0.8], [0, 1]);
   const headingOpacity = useTransform(p, [0, 0.5], [0, 1]);
-  const headingRotate = useTransform(p, [0, 0.3], ["0deg", "360deg"]);
+  const headingRotate = useTransform(
+    p,
+    [0, 0.3, 0.5],
+    ["50deg", "20deg", "0deg"]
+  );
 
   return (
-    <motion.div
-      className="relative z-10 max-w-3xl space-y-6 will-change-transform"
-      style={{ opacity: containerOpacity }}
-    >
+    <div className="relative z-10 max-w-3xl space-y-6">
       <motion.h2
         className="text-left text-6xl md:text-8xl font-bold text-green-800 dark:text-green-300"
         style={{ opacity: headingOpacity, rotate: headingRotate }}
       >
         We're certified.
       </motion.h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 pt-10">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-10"
+        style={{ opacity: containerOpacity }}
+      >
         <CertificationBadge
           title="ISA Certified Arborists"
           image="/services/isa.png"
+          className="pl-2"
         />
         <CertificationBadge
           title="TRAQ Qualified"
           image="/services/traq_t.png"
+          className="pl-3"
         />
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

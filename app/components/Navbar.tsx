@@ -19,6 +19,7 @@ const navLinks: { label: string; href: string }[] = [
   { label: "Services", href: "/services" },
   { label: "Our Mission", href: "/mission" },
   { label: "Get a Quote", href: "/quote" },
+  { label: "Gallery", href: "/gallery" },
 ];
 
 function MobileNavbar() {
