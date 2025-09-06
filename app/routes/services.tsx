@@ -3,7 +3,7 @@ import ScrollAnimation from "../components/ScrollAnimation";
 import { motion } from "motion/react";
 import React from "react";
 
-import { inverseLerp } from "~/utils/lerp";
+import { inverseLerp, lerp, toRadians } from "~/utils/math";
 
 type SectionChild = React.ReactNode | ((progress: number) => React.ReactNode);
 
@@ -57,7 +57,7 @@ export default function Services() {
         </p>
       </motion.header>
 
-      <Section className="text-left bg-blue-500 dark:bg-blue-900" height={3}>
+      <Section className="text-left bg-blue-500 dark:bg-blue-900" height={4}>
         {(p) => {
           return (
             <>
@@ -77,7 +77,7 @@ export default function Services() {
                 alt="A healthy tree"
                 className="absolute inset-0 object-cover w-60 h-60 will-change-transform"
                 style={{
-                  transform: `translate(${inverseLerp(0.2, 0.5, p) * 600}px, ${inverseLerp(0.2, 0.5, p)}px)`,
+                  transform: `translate(${p * 100}vw, ${Math.cos(toRadians(p * 360)) * 100}px) translateX(-50%) translateY(30vh)`,
                 }}
               />
               <div
