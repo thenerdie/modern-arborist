@@ -34,6 +34,19 @@ function Section({
   );
 }
 
+function GetAQuote({ text = "Get a Quote" }: { text?: string }) {
+  return (
+    <motion.a
+      href="/contact"
+      className="mt-6 inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {text}
+    </motion.a>
+  );
+}
+
 function CertificationBadge({
   title,
   image,
@@ -54,10 +67,6 @@ function CertificationBadge({
       <div
         aria-hidden
         className="pointer-events-none absolute -inset-px rounded-2xl bg-[radial-gradient(50%_50%_at_50%_0%,rgba(16,185,129,0.22),transparent_70%)] opacity-60 group-hover:opacity-90 transition-opacity"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-6 -top-1 h-1/3 rounded-full bg-gradient-to-b from-white/40 to-transparent dark:from-white/10"
       />
 
       <motion.img
@@ -159,6 +168,7 @@ function PreservationContent() {
           Removal is never our first choice. We will always prioritize tree
           health and preservation before destruction.
         </motion.b>
+        <GetAQuote />
       </motion.div>
     </>
   );
@@ -232,23 +242,23 @@ function TreeRemovalContent() {
         {TEXTS[currentTextIndex]}
       </motion.h2>
       <p className="text-base sm:text-xl text-white/80 leading-relaxed text-shadow-xs">
-        In cases where a tree poses a significant risk to property, safety, or
-        health, we perform expert tree removal services. Our team uses advanced
-        techniques to ensure safe, efficient, and environmentally responsible
-        removals, minimizing impact on the surrounding area.
-        <br /> <br /> Tree removal is never our first choice, but sometimes it’s
-        the best option for safety and property protection. Whether due to storm
-        damage, disease, or structural concerns, we provide safe, efficient
-        removals using modern equipment and industry best practices. Every
-        removal is handled with care—from protecting nearby landscaping to
-        ensuring complete cleanup when the job is done. As ISA Certified
-        professionals, we follow strict safety standards so you can have peace
-        of mind knowing your property is in good hands.
+        Tree removal is never our first choice, but sometimes it’s the best
+        option for safety and property protection. Whether due to storm damage,
+        disease, or structural concerns, we provide safe, efficient removals
+        using modern equipment and industry best practices. Every removal is
+        handled with care—from protecting nearby landscaping to ensuring
+        complete cleanup when the job is done. As ISA Certified professionals,
+        we follow strict safety standards so you can have peace of mind knowing
+        your property is in good hands.
       </p>
       <motion.b className="text-red-200" style={{ opacity: emphasisOpacity }}>
         We assess each situation carefully, prioritizing safety and offering
         alternatives whenever possible before proceeding with removal.
       </motion.b>
+
+      <br />
+
+      <GetAQuote text="Discuss your options" />
     </motion.div>
   );
 }
