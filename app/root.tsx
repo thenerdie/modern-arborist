@@ -10,6 +10,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -58,6 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="min-h-screen bg-background text-foreground antialiased transition-colors duration-300">
         <Navbar />
         <div className="pt-16">{children}</div>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         {/* Keep theme in sync if the OS preference changes at runtime */}

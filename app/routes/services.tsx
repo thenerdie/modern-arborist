@@ -37,7 +37,7 @@ function Section({
 function GetAQuote({ text = "Get a Quote" }: { text?: string }) {
   return (
     <motion.a
-      href="/contact"
+      href="/quote"
       className="mt-6 inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -276,11 +276,17 @@ function CertificationsContent() {
   return (
     <div className="relative z-10 max-w-3xl space-y-6">
       <motion.h2
-        className="text-left text-6xl md:text-8xl font-bold text-green-800 dark:text-green-300"
+        className="text-left text-6xl md:text-8xl font-bold text-foreground dark:text-green-300"
         style={{ opacity: headingOpacity, rotate: headingRotate }}
       >
         We're certified.
       </motion.h2>
+      <motion.h1
+        className="text-left text-2xl md:text-3xl font-semibold text-green-100"
+        style={{ opacity: containerOpacity }}
+      >
+        We've got the accolades so you have peace of mind.
+      </motion.h1>
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-10"
         style={{ opacity: containerOpacity }}

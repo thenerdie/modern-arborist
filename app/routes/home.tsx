@@ -4,7 +4,6 @@ import { WhyChooseUs } from "../components/WhyChooseUs";
 import { Services } from "../components/Services";
 import { Process } from "../components/Process";
 import { CTA } from "../components/CTA";
-import { Footer } from "../components/Footer";
 import { Reviews } from "../components/Reviews";
 import { MissionStatement } from "~/components/MissionStatement";
 import type { Review } from "../components/Reviews";
@@ -47,7 +46,7 @@ export async function loader() {
       reviews = SAMPLE_REVIEWS;
     }
     _cache = { ts: Date.now(), data: reviews };
-  return { reviews };
+    return { reviews };
   } catch (e) {
     return { reviews: SAMPLE_REVIEWS };
   }
@@ -112,7 +111,6 @@ export default function Home() {
       <Services />
       <Process />
       <CTA />
-      <Footer />
     </>
   );
 }

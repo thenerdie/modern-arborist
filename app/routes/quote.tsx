@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, animate, inView } from "motion/react";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 
 interface FieldProps {
   label: string;
@@ -7,7 +9,12 @@ interface FieldProps {
   name: string;
   value: string;
   setFormData: React.Dispatch<
-    React.SetStateAction<{ name: string; email: string; message: string }>
+    React.SetStateAction<{
+      name: string;
+      email: string;
+      message: string;
+      phone: string;
+    }>
   >;
   isTextarea?: boolean;
   placeholder?: string;
@@ -71,7 +78,7 @@ const Field = ({
         {label}
       </label>
       {isTextarea ? (
-        <textarea
+        <Textarea
           name={name}
           id={name}
           rows={4}
@@ -82,11 +89,11 @@ const Field = ({
           placeholder={placeholder}
           required
           data-animate-field
-          className="mt-1 block w-full px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500/60 focus:ring-offset-0 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 opacity-0"
+          className="mt-1 opacity-0"
           style={{ transform: "translateY(12px)" }}
         />
       ) : (
-        <input
+        <Input
           type={type}
           name={name}
           id={name}
@@ -96,7 +103,7 @@ const Field = ({
           onBlur={handleBlur}
           required
           data-animate-field
-          className="mt-1 block w-full px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500/60 focus:ring-offset-0 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 opacity-0"
+          className="mt-1 opacity-0"
           style={{ transform: "translateY(12px)" }}
         />
       )}
@@ -108,6 +115,7 @@ export default function Quote() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
 
@@ -155,6 +163,7 @@ export default function Quote() {
     setFormData({
       name: "",
       email: "",
+      phone: "",
       message: "",
     });
   };
@@ -213,6 +222,13 @@ export default function Quote() {
           type="email"
           name="email"
           value={formData.email}
+          setFormData={setFormData}
+        />
+        <Field
+          label="Phone Number"
+          type="tel"
+          name="phone"
+          value={formData.phone}
           setFormData={setFormData}
         />
         <Field
