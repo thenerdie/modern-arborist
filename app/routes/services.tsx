@@ -2,12 +2,19 @@ import ScrollAnimation, {
   useScrollProgress,
 } from "../components/ScrollAnimation";
 
-import { motion, useTransform } from "motion/react";
-import React, { useState } from "react";
+import { motion, useTransform, useMotionValueEvent } from "motion/react";
+import type { MotionValue } from "motion/react";
+import React, { useState, useEffect } from "react";
 
 import { toRadians } from "~/utils/math";
 
 type SectionChild = React.ReactNode | ((progress: number) => React.ReactNode);
+
+function truncateText(text: string, pct: number) {
+  const maxLength = Math.floor(text.length * pct);
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength - 1) + "|";
+}
 
 function Section({
   className,
@@ -32,6 +39,61 @@ function Section({
       )}
     />
   );
+}
+
+function Typewriter({
+  children: text,
+  pct,
+}: {
+  children: string;
+  pct: MotionValue<number>;
+}) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  // Split text into sentences, preferring Intl.Segmenter if available
+  function splitIntoSentences(t: string): string[] {
+    try {
+      if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
+        const seg = new (Intl as any).Segmenter(undefined, {
+          granularity: "sentence",
+        });
+        const out: string[] = [];
+        for (const { segment } of (seg as any).segment(t)) {
+          const s = String(segment).trim();
+          if (s) out.push(s);
+        }
+        if (out.length) return out;
+      }
+    } catch {
+      // ignore and fall back to regex
+    }
+    const matches = t.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
+    return matches.map((s) => s.trim()).filter(Boolean);
+  }
+
+  function compute(tProgress: number) {
+    const sentences = splitIntoSentences(text);
+    const n = sentences.length || 1;
+    const raw = Math.max(0, Math.min(1, tProgress)) * n;
+    let s = Math.floor(raw);
+    if (s >= n) s = n - 1;
+    const r = Math.min(1, Math.max(0, raw - s));
+    const sentence = sentences[s] || "";
+    return truncateText(sentence, r);
+  }
+
+  // Initialize on mount or if text changes
+  useEffect(() => {
+    setDisplayedText(compute(pct.get()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
+
+  // Update as the MotionValue changes
+  useMotionValueEvent(pct, "change", (latest) => {
+    setDisplayedText(compute(latest));
+  });
+
+  return <span>{displayedText}</span>;
 }
 
 function GetAQuote({ text = "Get a Quote" }: { text?: string }) {
@@ -98,7 +160,7 @@ function PreservationSection() {
 
 function TreeRemovalSection() {
   return (
-    <Section className="text-left bg-red-800 dark:bg-red-900" height={4}>
+    <Section className="text-left will-change-auto" height={7}>
       {() => <TreeRemovalContent />}
     </Section>
   );
@@ -111,6 +173,14 @@ function CertificationsSection() {
       height={5}
     >
       {() => <CertificationsContent />}
+    </Section>
+  );
+}
+
+function StumpGrindingSection() {
+  return (
+    <Section className="text-left bg-amber-700 dark:bg-amber-900" height={3}>
+      {() => <StumpGrindingContent />}
     </Section>
   );
 }
@@ -182,7 +252,11 @@ function TreeRemovalContent() {
     ["translateX(-50%)", "translateX(0%)"]
   );
   const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
-  const emphasisOpacity = useTransform(p, [0.5, 0.9], [0, 1]);
+  const emphasisOpacity = useTransform(p, [0.7, 0.9], [0, 1]);
+  const emphasisY = useTransform(p, [0.7, 0.9], ["40px", "0px"]);
+
+  const typePct1 = useTransform(p, [0, 0.8], [0, 1]);
+  const typePct2 = useTransform(p, [0.5, 0.85], [0, 1]);
 
   const TEXTS = [
     "You can't save them all.",
@@ -190,34 +264,8 @@ function TreeRemovalContent() {
     "It is what it is.",
     "Safety first, always.",
     "When removal is the only option.",
-    "Expert tree removal services.",
-    "Protecting property and safety.",
-    "Responsible and efficient.",
-    "Certified professionals at work.",
-    "Careful assessment before action.",
-    "Minimizing environmental impact.",
     "Your safety is our priority.",
     "Trust the experts.",
-    "We handle it with care.",
-    "Precision and professionalism.",
-    "Committed to safety and quality.",
-    "Tree removal done right.",
-    "When trees must come down.",
-    "We make tough calls.",
-    "Balancing safety and nature.",
-    "Your property, our responsibility.",
-    "Removing risk, preserving peace of mind.",
-    "Expertise you can trust.",
-    "Safety, efficiency, responsibility.",
-    "When it's time to say goodbye.",
-    "Professional tree removal services.",
-    "Caring for your trees, even in removal.",
-    "We assess, we decide, we act.",
-    "Tree removal with care and precision.",
-    "Your safety, our mission.",
-    "Handling tree removal with expertise.",
-    "When safety is non-negotiable.",
-    "We prioritize your safety.",
   ];
 
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -241,17 +289,22 @@ function TreeRemovalContent() {
       >
         {TEXTS[currentTextIndex]}
       </motion.h2>
-      <p className="text-base sm:text-xl text-white/80 leading-relaxed text-shadow-xs">
-        Tree removal is never our first choice, but sometimes it’s the best
-        option for safety and property protection. Whether due to storm damage,
-        disease, or structural concerns, we provide safe, efficient removals
-        using modern equipment and industry best practices. Every removal is
-        handled with care—from protecting nearby landscaping to ensuring
-        complete cleanup when the job is done. As ISA Certified professionals,
-        we follow strict safety standards so you can have peace of mind knowing
-        your property is in good hands.
+      <p className="text-base sm:text-2xl text-white/80 leading-relaxed text-shadow-xs">
+        <Typewriter pct={typePct1}>
+          Tree removal is never our first choice, but sometimes it’s the best
+          option for safety and property protection. Whether due to storm
+          damage, disease, or structural concerns, we provide safe, efficient
+          removals using modern equipment and industry best practices. Every
+          removal is handled with care—from protecting nearby landscaping to
+          ensuring complete cleanup when the job is done. As ISA Certified
+          professionals, we follow strict safety standards so you can have peace
+          of mind knowing your property is in good hands.
+        </Typewriter>
       </p>
-      <motion.b className="text-red-200" style={{ opacity: emphasisOpacity }}>
+      <motion.b
+        className="text-red-200 block"
+        style={{ opacity: emphasisOpacity, y: emphasisY }}
+      >
         We assess each situation carefully, prioritizing safety and offering
         alternatives whenever possible before proceeding with removal.
       </motion.b>
@@ -306,6 +359,54 @@ function CertificationsContent() {
   );
 }
 
+function StumpGrindingContent() {
+  const p = useScrollProgress();
+  const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
+  const containerTransform = useTransform(
+    p,
+    [0, 1],
+    ["translateY(20%)", "translateY(0%)"]
+  );
+  const emphasisOpacity = useTransform(p, [0.5, 0.9], [0, 1]);
+  const emphasisY = useTransform(p, [0.5, 0.9], ["40px", "0px"]);
+  const typePctS1 = useTransform(p, [0, 0.5], [0, 1]);
+  const typePctS2 = useTransform(p, [0.5, 0.85], [0, 1]);
+
+  return (
+    <motion.div
+      className="relative z-10 max-w-4xl space-y-6 will-change-transform"
+      style={{ opacity: containerOpacity, transform: containerTransform }}
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-white text-shadow-lg">
+        Stump Grinding
+      </h2>
+      <p className="text-base sm:text-xl text-white/90 leading-relaxed text-shadow-xs">
+        <Typewriter pct={typePctS1}>
+          After a tree is removed, the stump left behind can be more than just
+          an eyesore — it can also be a tripping hazard, attract pests, and make
+          future planting difficult. Our professional stump grinding service
+          safely and efficiently removes stumps of all sizes, restoring your
+          yard to a clean, usable space.
+        </Typewriter>
+      </p>
+      <p className="text-base sm:text-xl text-white/90 leading-relaxed text-shadow-xs">
+        <Typewriter pct={typePctS2}>
+          We grind stumps below ground level, leaving the area ready for grass,
+          landscaping, or even replanting. Every job includes thorough cleanup
+          so your property looks neat and finished when we’re done.
+        </Typewriter>
+      </p>
+      <motion.b
+        className="text-amber-200 pr-4 block"
+        style={{ opacity: emphasisOpacity, y: emphasisY }}
+      >
+        Clean finish, ready for what’s next.
+      </motion.b>
+      <GetAQuote text="Get a stump grinding quote" />
+    </motion.div>
+  );
+}
+
 export default function Services() {
   return (
     <div className="mx-auto bg-white dark:bg-black">
@@ -334,6 +435,7 @@ export default function Services() {
       <PreservationSection />
       <CertificationsSection />
       <TreeRemovalSection />
+      <StumpGrindingSection />
     </div>
   );
 }
