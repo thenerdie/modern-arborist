@@ -26,14 +26,14 @@ export default function Typewriter({
           });
           const out: string[] = [];
           for (const { segment } of (seg as any).segment(t)) {
-            const s = String(segment).trim();
+            const s = String(segment);
             if (s) out.push(s);
           }
           if (out.length) return out;
         }
       } catch {}
       const matches = t.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
-      return matches.map((s) => s.trim()).filter(Boolean);
+      return matches.filter(Boolean);
     })(text);
     if (!sentences.length) return text;
     return sentences.reduce(
@@ -86,7 +86,7 @@ export default function Typewriter({
   });
 
   return (
-    <span className="relative inline-block align-top">
+    <span className="font-mono relative inline-block align-top">
       <span aria-hidden className="invisible">
         {reserveText}
       </span>

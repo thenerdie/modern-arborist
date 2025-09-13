@@ -9,17 +9,11 @@ import GetAQuote from "~/components/GetAQuote";
 
 function TreeRemovalContent() {
   const p = useScrollProgress();
-  const containerTransform = useTransform(
-    p,
-    [0, 1],
-    ["translateX(-50%)", "translateX(0%)"]
-  );
   const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
   const emphasisOpacity = useTransform(p, [0.7, 0.9], [0, 1]);
   const emphasisY = useTransform(p, [0.7, 0.9], [40, 0]);
 
   const typePct1 = useTransform(p, [0, 0.8], [0, 1]);
-  const typePct2 = useTransform(p, [0.5, 0.85], [0, 1]);
 
   const TEXTS = [
     "You can't save them all.",
@@ -52,7 +46,7 @@ function TreeRemovalContent() {
       >
         {TEXTS[currentTextIndex]}
       </motion.h2>
-      <p className="text-base sm:text-2xl text-white/80 leading-relaxed text-shadow-xs">
+      <p className="text-base sm:text-3xl text-white/80 leading-relaxed text-shadow-xs">
         <Typewriter pct={typePct1}>
           Tree removal is never our first choice, but sometimes it’s the best
           option for safety and property protection. Whether due to storm
@@ -79,7 +73,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section className="text-left will-change-auto" height={7}>
+    <Section className="text-left" height={7}>
       {() => <TreeRemovalContent />}
     </Section>
   );

@@ -34,7 +34,7 @@ function EmergencyServicesContent() {
 
 export default function EmergencyServicesSection() {
   return (
-    <Section className="text-left bg-red-700 dark:bg-red-900" height={3}>
+    <Section className="text-left bg-red-700 dark:bg-red-900" height={6}>
       {() => <EmergencyServicesContent />}
     </Section>
   );
