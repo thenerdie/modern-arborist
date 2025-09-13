@@ -4,7 +4,7 @@ import ScrollAnimation, {
 
 import { motion, useTransform, useMotionValueEvent } from "motion/react";
 import type { MotionValue } from "motion/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import { toRadians } from "~/utils/math";
 
@@ -12,8 +12,9 @@ type SectionChild = React.ReactNode | ((progress: number) => React.ReactNode);
 
 function truncateText(text: string, pct: number) {
   const maxLength = Math.floor(text.length * pct);
+  if (maxLength <= 0) return "";
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength - 1) + "|";
+  return text.slice(0, Math.max(0, maxLength - 1)) + "|";
 }
 
 function Section({
@@ -49,6 +50,31 @@ function Typewriter({
   pct: MotionValue<number>;
 }) {
   const [displayedText, setDisplayedText] = useState("");
+  const reserveText = useMemo(() => {
+    // Pick the longest sentence to reserve space for stable layout.
+    const sentences = (function split(t: string): string[] {
+      try {
+        if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
+          const seg = new (Intl as any).Segmenter(undefined, {
+            granularity: "sentence",
+          });
+          const out: string[] = [];
+          for (const { segment } of (seg as any).segment(t)) {
+            const s = String(segment).trim();
+            if (s) out.push(s);
+          }
+          if (out.length) return out;
+        }
+      } catch {}
+      const matches = t.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
+      return matches.map((s) => s.trim()).filter(Boolean);
+    })(text);
+    if (!sentences.length) return text;
+    return sentences.reduce(
+      (longest, s) => (s.length > longest.length ? s : longest),
+      sentences[0]
+    );
+  }, [text]);
 
   // Split text into sentences, preferring Intl.Segmenter if available
   function splitIntoSentences(t: string): string[] {
@@ -93,7 +119,14 @@ function Typewriter({
     setDisplayedText(compute(latest));
   });
 
-  return <span>{displayedText}</span>;
+  return (
+    <span className="relative inline-block align-top">
+      <span aria-hidden className="invisible">
+        {reserveText}
+      </span>
+      <span className="absolute inset-0">{displayedText}</span>
+    </span>
+  );
 }
 
 function GetAQuote({ text = "Get a Quote" }: { text?: string }) {
@@ -185,6 +218,14 @@ function StumpGrindingSection() {
   );
 }
 
+function EmergencyServicesSection() {
+  return (
+    <Section className="text-left bg-red-700 dark:bg-red-900" height={3}>
+      {() => <EmergencyServicesContent />}
+    </Section>
+  );
+}
+
 // Motion-driven content components that consume scroll progress via context
 function PreservationContent() {
   const p = useScrollProgress();
@@ -253,7 +294,7 @@ function TreeRemovalContent() {
   );
   const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
   const emphasisOpacity = useTransform(p, [0.7, 0.9], [0, 1]);
-  const emphasisY = useTransform(p, [0.7, 0.9], ["40px", "0px"]);
+  const emphasisY = useTransform(p, [0.7, 0.9], [40, 0]);
 
   const typePct1 = useTransform(p, [0, 0.8], [0, 1]);
   const typePct2 = useTransform(p, [0.5, 0.85], [0, 1]);
@@ -308,8 +349,6 @@ function TreeRemovalContent() {
         We assess each situation carefully, prioritizing safety and offering
         alternatives whenever possible before proceeding with removal.
       </motion.b>
-
-      <br />
 
       <GetAQuote text="Discuss your options" />
     </motion.div>
@@ -368,7 +407,7 @@ function StumpGrindingContent() {
     ["translateY(20%)", "translateY(0%)"]
   );
   const emphasisOpacity = useTransform(p, [0.5, 0.9], [0, 1]);
-  const emphasisY = useTransform(p, [0.5, 0.9], ["40px", "0px"]);
+  const emphasisY = useTransform(p, [0.5, 0.9], [40, 0]);
   const typePctS1 = useTransform(p, [0, 0.5], [0, 1]);
   const typePctS2 = useTransform(p, [0.5, 0.85], [0, 1]);
 
@@ -386,14 +425,10 @@ function StumpGrindingContent() {
           an eyesore — it can also be a tripping hazard, attract pests, and make
           future planting difficult. Our professional stump grinding service
           safely and efficiently removes stumps of all sizes, restoring your
-          yard to a clean, usable space.
-        </Typewriter>
-      </p>
-      <p className="text-base sm:text-xl text-white/90 leading-relaxed text-shadow-xs">
-        <Typewriter pct={typePctS2}>
-          We grind stumps below ground level, leaving the area ready for grass,
-          landscaping, or even replanting. Every job includes thorough cleanup
-          so your property looks neat and finished when we’re done.
+          yard to a clean, usable space. We grind stumps below ground level,
+          leaving the area ready for grass, landscaping, or even replanting.
+          Every job includes thorough cleanup so your property looks neat and
+          finished when we’re done.
         </Typewriter>
       </p>
       <motion.b
@@ -403,6 +438,47 @@ function StumpGrindingContent() {
         Clean finish, ready for what’s next.
       </motion.b>
       <GetAQuote text="Get a stump grinding quote" />
+    </motion.div>
+  );
+}
+
+function EmergencyServicesContent() {
+  const p = useScrollProgress();
+  const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
+  const containerTransform = useTransform(
+    p,
+    [0, 1],
+    ["translateY(30%)", "translateY(0%)"]
+  );
+  const emphasisOpacity = useTransform(p, [0.5, 0.9], [0, 1]);
+  const emphasisY = useTransform(p, [0.5, 0.9], [40, 0]);
+  const typePct = useTransform(p, [0, 0.6], [0, 1]);
+
+  return (
+    <motion.div
+      className="relative z-10 max-w-4xl space-y-6 will-change-transform"
+      style={{ opacity: containerOpacity, transform: containerTransform }}
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-white text-shadow-lg">
+        Emergency Services
+      </h2>
+      <p className="text-base sm:text-xl text-white/90 leading-relaxed text-shadow-xs">
+        <Typewriter pct={typePct}>
+          Storms and unexpected events can leave trees damaged, dangerous, or
+          blocking access to your property. When that happens, you need quick,
+          professional help. We provide emergency tree services to safely remove
+          hazardous limbs and downed trees, restoring safety and peace of mind.
+        </Typewriter>
+      </p>
+      <motion.b
+        className="text-red-200 pr-4 block"
+        style={{ opacity: emphasisOpacity, y: emphasisY }}
+      >
+        Our team is equipped to respond promptly, even in difficult conditions.
+        With safety as our top priority, we work efficiently to protect your
+        home, family, and property from further damage.
+      </motion.b>
+      <GetAQuote text="Request emergency help" />
     </motion.div>
   );
 }
@@ -435,6 +511,7 @@ export default function Services() {
       <PreservationSection />
       <CertificationsSection />
       <TreeRemovalSection />
+      <EmergencyServicesSection />
       <StumpGrindingSection />
     </div>
   );
