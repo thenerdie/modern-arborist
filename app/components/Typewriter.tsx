@@ -16,62 +16,30 @@ export default function Typewriter({
   pct: MotionValue<number>;
 }) {
   const [displayedText, setDisplayedText] = useState("");
-  const reserveText = useMemo(() => {
-    // Pick the longest sentence to reserve space for stable layout.
-    const sentences = (function split(t: string): string[] {
-      try {
-        if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
-          const seg = new (Intl as any).Segmenter(undefined, {
-            granularity: "sentence",
-          });
-          const out: string[] = [];
-          for (const { segment } of (seg as any).segment(t)) {
-            const s = String(segment);
-            if (s) out.push(s);
-          }
-          if (out.length) return out;
-        }
-      } catch {}
-      const matches = t.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
-      return matches.filter(Boolean);
-    })(text);
-    if (!sentences.length) return text;
+
+  const sentences = useMemo(() => {
+    return text.split(/(?<=[.!?])\s+/);
+  }, [text]);
+
+  // Find the longest sentence to reserve space for stable layout
+  const longestSentence = useMemo(() => {
     return sentences.reduce(
       (longest, s) => (s.length > longest.length ? s : longest),
       sentences[0]
     );
   }, [text]);
 
-  // Split text into sentences, preferring Intl.Segmenter if available
-  function splitIntoSentences(t: string): string[] {
-    try {
-      if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
-        const seg = new (Intl as any).Segmenter(undefined, {
-          granularity: "sentence",
-        });
-        const out: string[] = [];
-        for (const { segment } of (seg as any).segment(t)) {
-          const s = String(segment).trim();
-          if (s) out.push(s);
-        }
-        if (out.length) return out;
-      }
-    } catch {
-      // ignore and fall back to regex
-    }
-    const matches = t.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
-    return matches.map((s) => s.trim()).filter(Boolean);
-  }
-
   function compute(tProgress: number) {
-    const sentences = splitIntoSentences(text);
-    const n = sentences.length || 1;
-    const raw = Math.max(0, Math.min(1, tProgress)) * n;
-    let s = Math.floor(raw);
-    if (s >= n) s = n - 1;
-    const r = Math.min(1, Math.max(0, raw - s));
-    const sentence = sentences[s] || "";
-    return truncateText(sentence, r);
+    const count = sentences.length || 1;
+    const raw = Math.max(0, Math.min(1, tProgress)) * count;
+
+    let index = Math.floor(raw);
+    if (index >= count) index = count - 1;
+
+    const r = Math.min(1, Math.max(0, raw - index));
+    const sentence = sentences[index] || "";
+
+    return truncateText(sentence, r * 2);
   }
 
   // Initialize on mount or if text changes
@@ -88,7 +56,7 @@ export default function Typewriter({
   return (
     <span className="font-mono relative inline-block align-top">
       <span aria-hidden className="invisible">
-        {reserveText}
+        {longestSentence}
       </span>
       <span className="absolute inset-0">{displayedText}</span>
     </span>
