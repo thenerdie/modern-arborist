@@ -10,9 +10,11 @@ function truncateText(text: string, pct: number) {
 
 export default function Typewriter({
   children: text,
+  className,
   pct,
 }: {
   children: string;
+  className?: string;
   pct: MotionValue<number>;
 }) {
   const [displayedText, setDisplayedText] = useState("");
@@ -54,7 +56,9 @@ export default function Typewriter({
   });
 
   return (
-    <span className="font-mono relative inline-block align-top">
+    <span
+      className={`font-mono font-bold inline-block align-top relative ${className}`}
+    >
       <span aria-hidden className="invisible">
         {longestSentence}
       </span>

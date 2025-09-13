@@ -9,6 +9,7 @@ import GetAQuote from "~/components/GetAQuote";
 
 function TreeRemovalContent() {
   const p = useScrollProgress();
+
   const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
   const emphasisOpacity = useTransform(p, [0.8, 0.9], [0, 1]);
   const emphasisY = useTransform(p, [0.8, 0.9], [40, 0]);
@@ -34,23 +35,25 @@ function TreeRemovalContent() {
       >
         {TEXTS[currentTextIndex]}
       </motion.h2> */}
-      <p className="text-base sm:text-3xl text-white/80 leading-relaxed text-shadow-xs">
-        <Typewriter pct={typePct1}>
-          Tree removal is never our first choice, but sometimes it’s the best
-          option for safety and property protection. Whether due to storm
-          damage, disease, or structural concerns, we provide safe, efficient
-          removals using modern equipment and industry best practices. Every
-          removal is handled with care—from protecting nearby landscaping to
-          ensuring complete cleanup when the job is done. As ISA Certified
-          professionals, we follow strict safety standards so you can have peace
-          of mind knowing your property is in good hands.
-        </Typewriter>
-      </p>
+      <Typewriter
+        pct={typePct1}
+        className="absolute text-3xl tracking-tight text-white/80 leading-snug text-shadow-xs"
+      >
+        Tree removal is never our first choice, but sometimes it’s the best
+        option for safety and property protection. Whether due to storm damage,
+        disease, or structural concerns, we provide safe, efficient removals
+        using modern equipment and industry best practices. Every removal is
+        handled with care—from protecting nearby landscaping to ensuring
+        complete cleanup when the job is done. As ISA Certified professionals,
+        we follow strict safety standards so you can have peace of mind knowing
+        your property is in good hands.
+      </Typewriter>
+
       <motion.b
-        className="text-red-300 block text-2xl"
+        className="text-red-300 block text-xl"
         style={{ opacity: emphasisOpacity, y: emphasisY }}
       >
-        Contact us for a free consultation and tree risk assessment.
+        Contact us for a free risk assessment.
       </motion.b>
 
       <GetAQuote
@@ -63,7 +66,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section className="text-left" height={7}>
+    <Section className="text-left" height={30}>
       {() => <TreeRemovalContent />}
     </Section>
   );
