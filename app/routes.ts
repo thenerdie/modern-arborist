@@ -4,6 +4,6 @@ export default [
   index("routes/home.tsx"),
   route("quote", "routes/quote.tsx"),
   route("mission", "routes/mission.tsx"),
-  route("services", "routes/services.tsx"),
+  route("services", "routes/services/index.tsx"),
   route("gallery", "routes/gallery.tsx"),
 ] satisfies RouteConfig;

@@ -1,7 +1,7 @@
 import type { Route } from "./+types/home";
 import { Hero } from "../components/Hero";
 import { WhyChooseUs } from "../components/WhyChooseUs";
-import { Services } from "../components/Services";
+import { Services } from "../components/services";
 import { Process } from "../components/Process";
 import { CTA } from "../components/CTA";
 import { Reviews } from "../components/Reviews";

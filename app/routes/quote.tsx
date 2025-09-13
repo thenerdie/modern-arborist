@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, animate, inView } from "motion/react";
+import { motion, animate, inView, scale } from "motion/react";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 
@@ -250,7 +250,7 @@ export default function Quote() {
             if (buttonRef.current && !submitting) {
               animate(
                 buttonRef.current,
-                { transform: "scale(1.03)" },
+                { scale: 1.03 },
                 { duration: 0.25, ease: "easeOut" }
               );
             }
@@ -259,7 +259,7 @@ export default function Quote() {
             if (buttonRef.current && !submitting) {
               animate(
                 buttonRef.current,
-                { transform: "scale(1)" },
+                { scale: 1 },
                 { duration: 0.25, ease: "easeOut" }
               );
             }
