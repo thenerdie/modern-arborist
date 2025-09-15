@@ -56,7 +56,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section className="text-left bg-gray-900" height={25}>
+    <Section className="text-left" height={25}>
       {() => <TreeRemovalContent />}
     </Section>
   );
