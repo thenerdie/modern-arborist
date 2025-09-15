@@ -17,7 +17,7 @@ function CertificationBadge({
       whileHover={{ y: -4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
-      className="relative isolate group flex md:flex-col flex-row items-center gap-2 justify-center text-center rounded-2xl p-5 md:p-6 shadow-xl ring-1 ring-black/5 dark:ring-white/10 bg-gradient-to-br from-white/80 via-white/70 to-emerald-50/60 dark:from-gray-900/60 dark:via-gray-900/40 dark:to-emerald-900/20 backdrop-blur-md"
+      className="relative isolate group flex md:flex-col flex-row items-center gap-2 justify-center text-center rounded-2xl p-2 md:p-6 shadow-xl ring-1 ring-black/5 dark:ring-white/10 bg-gradient-to-br from-white/80 via-white/70 to-emerald-50/60 dark:from-gray-900/60 dark:via-gray-900/40 dark:to-emerald-900/20 backdrop-blur-md"
       aria-label={title}
     >
       <div
@@ -28,7 +28,7 @@ function CertificationBadge({
       <motion.img
         src={image}
         alt={title}
-        className={`h-10 md:h-32 w-auto rounded-md shadow-lg mb-4 object-contain ${
+        className={`h-15 md:h-32 w-auto rounded-md shadow-lg mb-4 object-contain ${
           className || ""
         }`}
         initial={{ filter: "saturate(0.9)" }}
@@ -48,28 +48,24 @@ function CertificationsContent() {
   const p = useScrollProgress();
   const containerOpacity = useTransform(p, [0.5, 0.8], [0, 1]);
   const headingOpacity = useTransform(p, [0, 0.5], [0, 1]);
-  const headingRotate = useTransform(
-    p,
-    [0, 0.3, 0.5],
-    ["50deg", "20deg", "0deg"]
-  );
 
   return (
     <div className="relative z-10 max-w-3xl space-y-6">
       <motion.h2
-        className="text-left text-2xl md:text-3xl font-bold text-foreground dark:text-green-300"
-        style={{ opacity: headingOpacity, rotate: headingRotate }}
+        className="text-center text-3xl md:text-5xl font-bold text-foreground dark:text-green-300"
+        style={{ opacity: headingOpacity }}
       >
-        We're certified.
+        We're certified. And insured.
       </motion.h2>
       <motion.h1
-        className="text-left text-2xl md:text-3xl font-semibold text-green-100"
+        className="text-center text-lg md:text-2xl font-semibold text-green-100"
         style={{ opacity: containerOpacity }}
       >
         We've got the accolades so you have peace of mind.
       </motion.h1>
+      {/* Using flex-wrap so that an incomplete final row is centered. */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-5"
+        className="flex flex-wrap justify-center gap-3 pt-2 md:gap-10 md:pt-5"
         style={{ opacity: containerOpacity }}
       >
         <CertificationBadge
@@ -81,6 +77,10 @@ function CertificationsContent() {
           title="TRAQ Qualified"
           image="/services/traq_t.png"
           className="pl-3"
+        />
+        <CertificationBadge
+          title="Fully Licensed & Insured"
+          image="/services/traq.png"
         />
       </motion.div>
     </div>

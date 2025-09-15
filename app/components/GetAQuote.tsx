@@ -4,15 +4,18 @@ import { cn } from "~/lib/utils";
 export default function GetAQuote({
   text = "Get a Quote",
   className,
+  style,
 }: {
   text?: string;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <motion.a
       href="/quote"
+      style={style}
       className={cn(
-        "inline-block px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition will-change-transform",
+        "inline-block px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl will-change-transform",
         className
       )}
       whileHover={{ scale: 1.05 }}

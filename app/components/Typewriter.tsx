@@ -13,7 +13,7 @@ export default function Typewriter({
   className,
   pct,
 }: {
-  children: string;
+  children: any;
   className?: string;
   pct: MotionValue<number>;
 }) {
@@ -56,9 +56,7 @@ export default function Typewriter({
   });
 
   return (
-    <span
-      className={`font-mono font-bold inline-block align-top relative ${className}`}
-    >
+    <span className={`font-mono font-bold inline-block align-top ${className}`}>
       <span aria-hidden className="invisible">
         {longestSentence}
       </span>

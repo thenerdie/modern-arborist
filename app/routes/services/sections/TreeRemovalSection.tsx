@@ -10,17 +10,13 @@ import GetAQuote from "~/components/GetAQuote";
 function TreeRemovalContent() {
   const p = useScrollProgress();
 
-  const containerOpacity = useTransform(p, [0, 0.2], [0, 1]);
   const emphasisOpacity = useTransform(p, [0.8, 0.9], [0, 1]);
   const emphasisY = useTransform(p, [0.8, 0.9], [40, 0]);
 
   const typePct1 = useTransform(p, [0, 0.8], [0, 1]);
 
   return (
-    <motion.div
-      className="relative z-10 max-w-4xl space-y-8 will-change-transform"
-      style={{ opacity: containerOpacity }}
-    >
+    <motion.div className="relative z-10 max-w-4xl space-y-8 will-change-transform">
       {/* <motion.h2
         className="text-4xl md:text-5xl font-bold text-white text-shadow-lg"
         whileHover={{
@@ -37,7 +33,7 @@ function TreeRemovalContent() {
       </motion.h2> */}
       <Typewriter
         pct={typePct1}
-        className="absolute text-3xl tracking-tight text-white/80 leading-snug text-shadow-xs"
+        className="relative text-3xl tracking-tight text-white/80 leading-snug text-shadow-md"
       >
         Tree removal is never our first choice, but sometimes it’s the best
         option for safety and property protection. Whether due to storm damage,
@@ -49,16 +45,10 @@ function TreeRemovalContent() {
         your property is in good hands.
       </Typewriter>
 
-      <motion.b
-        className="text-red-300 block text-xl"
-        style={{ opacity: emphasisOpacity, y: emphasisY }}
-      >
-        Contact us for a free risk assessment.
-      </motion.b>
-
       <GetAQuote
         text="Discuss your options"
-        className={`mt-4 opacity-${emphasisOpacity.get()}`}
+        className={`md:mt-4 md:text-left text-center`}
+        style={{ opacity: emphasisOpacity.get() }}
       />
     </motion.div>
   );
@@ -66,7 +56,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section className="text-left" height={30}>
+    <Section className="text-left bg-gray-900" height={25}>
       {() => <TreeRemovalContent />}
     </Section>
   );
