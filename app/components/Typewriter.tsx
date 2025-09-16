@@ -1,5 +1,7 @@
 import { MotionValue, animate, useMotionValueEvent } from "framer-motion";
-import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "motion/react";
+import { useEffect, useMemo, useState } from "react";
+import { cn } from "~/lib/utils";
 
 function truncateText(text: string, pct: number) {
   const maxLength = Math.floor(text.length * pct);
@@ -17,8 +19,6 @@ export default function Typewriter({
   className?: string;
   pct: MotionValue<number>;
 }) {
-  const [displayedText, setDisplayedText] = useState("");
-
   const sentences = useMemo(() => {
     return text.split(/(?<=[.!?])\s+/);
   }, [text]);
@@ -26,12 +26,14 @@ export default function Typewriter({
   // Find the longest sentence to reserve space for stable layout
   const longestSentence = useMemo(() => {
     return sentences.reduce(
-      (longest, s) => (s.length > longest.length ? s : longest),
+      (longest: string, s: string) => (s.length > longest.length ? s : longest),
       sentences[0]
     );
   }, [text]);
 
-  function compute(tProgress: number) {
+  const [computedText, endOfSentence] = useMemo(() => {
+    const tProgress = pct.get();
+
     const count = sentences.length || 1;
     const raw = Math.max(0, Math.min(1, tProgress)) * count;
 
@@ -41,26 +43,36 @@ export default function Typewriter({
     const r = Math.min(1, Math.max(0, raw - index));
     const sentence = sentences[index] || "";
 
-    return truncateText(sentence, r * 2);
-  }
+    const SPEED = 1.5;
 
-  // Initialize on mount or if text changes
-  useEffect(() => {
-    setDisplayedText(compute(pct.get()));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text]);
-
-  // Update as the MotionValue changes
-  useMotionValueEvent(pct, "change", (latest) => {
-    setDisplayedText(compute(latest));
-  });
+    return [truncateText(sentence, r * SPEED), r * SPEED >= 1];
+  }, [pct.get(), text]);
 
   return (
     <span className={`font-mono font-bold inline-block align-top ${className}`}>
       <span aria-hidden className="invisible">
         {longestSentence}
       </span>
-      <span className="absolute inset-0">{displayedText}</span>
+      <span className="absolute inset-0">{computedText}</span>
+      <br />
+      {endOfSentence && (
+        <motion.span
+          className={
+            "text-lg pt-2 will-change-transform absolute top-full text-gray-400"
+          }
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{
+            type: "spring",
+            stiffness: 460,
+            damping: 20,
+            delay: 0.2,
+          }}
+        >
+          Continue scrolling...
+        </motion.span>
+      )}
     </span>
   );
 }
