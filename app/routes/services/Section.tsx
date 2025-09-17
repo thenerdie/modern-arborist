@@ -5,16 +5,19 @@ import ScrollAnimation, {
 type SectionChild = React.ReactNode | ((progress: number) => React.ReactNode);
 
 export default function Section({
+  id,
   className,
   height,
   children,
 }: {
+  id?: string;
   children: SectionChild;
   className?: string;
   height?: number;
 }) {
   return (
     <ScrollAnimation
+      id={id}
       heightMultiplier={height ? height : 2}
       render={(progress: number) => (
         <div

@@ -15,10 +15,12 @@ export default function Typewriter({
   children: text,
   className,
   pct,
+  mountPromptTo,
 }: {
   children: any;
   className?: string;
   pct: MotionValue<number>;
+  mountPromptTo?: string;
 }) {
   const sentences = useMemo(() => {
     return text.split(/(?<=[.!?])\s+/);
@@ -74,7 +76,14 @@ export default function Typewriter({
       </span>
       <span className="absolute inset-0">{computedText}</span>
       {/* The scrolling prompt is portaled so transforms on ancestors don't affect fixed positioning */}
-      {mounted && endOfSentence && createPortal(prompt, document.body)}
+      {mounted &&
+        endOfSentence &&
+        createPortal(
+          prompt,
+          mountPromptTo
+            ? document.getElementById(mountPromptTo)!
+            : document.body
+        )}
     </span>
   );
 }

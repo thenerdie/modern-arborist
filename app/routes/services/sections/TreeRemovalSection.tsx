@@ -17,23 +17,10 @@ function TreeRemovalContent() {
 
   return (
     <motion.div className="relative z-10 max-w-4xl space-y-8 will-change-transform">
-      {/* <motion.h2
-        className="text-4xl md:text-5xl font-bold text-white text-shadow-lg"
-        whileHover={{
-          x: [0, -5, 5, -5, 5, 0, 0, -5, 5, -5, 5, 0],
-          y: [0, -2, 2, -2, 2, 0, 0, -2, 2, -2, 2, 0],
-          color: ["#ffffff", "#ffaaaa", "#ffffff"],
-          transition: { duration: 0.2 },
-        }}
-        onHoverStart={() => {
-          setCurrentTextIndex((currentTextIndex + 1) % TEXTS.length);
-        }}
-      >
-        {TEXTS[currentTextIndex]}
-      </motion.h2> */}
       <Typewriter
         pct={typePct1}
         className="relative text-3xl tracking-tight text-white/80 leading-snug text-shadow-md"
+        mountPromptTo="tree-removal"
       >
         Tree removal is never our first choice, but sometimes it’s the best
         option for safety and property protection. Whether due to storm damage,
@@ -56,7 +43,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section className="text-left" height={25}>
+    <Section id="tree-removal" className="text-left" height={25}>
       {() => <TreeRemovalContent />}
     </Section>
   );

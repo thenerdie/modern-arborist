@@ -34,6 +34,8 @@ interface ScrollAnimationProps {
   reducedMotionFallback?: React.ReactNode;
   /** If true, mirror progress to CSS var `--progress` */
   exposeCssVar?: boolean;
+  /** Optional id for the outer wrapper */
+  id?: string;
 }
 
 /**
@@ -41,6 +43,7 @@ interface ScrollAnimationProps {
  * via a render callback and mirrors it to a CSS variable `--progress`.
  */
 export function ScrollAnimation({
+  id,
   heightMultiplier = 3,
   render,
   className = "",
@@ -84,6 +87,7 @@ export function ScrollAnimation({
 
   return (
     <div
+      id={id}
       ref={wrapRef}
       className={`relative ${className}`}
       style={{ height: `${heightMultiplier * 100}vh` }}
