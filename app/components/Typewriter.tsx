@@ -27,23 +27,16 @@ function renderText(text: string, pct: number, sentenceKey: number): ReactNode {
       for (let i = 0; i < slice.length; i++) {
         const ch = slice[i];
         if (ch === " ") {
-          // A single fixed-width space using the current mono font metrics
+          // Use a safe, breakable Unicode space that doesn't collapse: FOUR-PER-EM SPACE (U+2005)
           wsParts.push(
-            <span
-              key={`sp-${sentenceKey}-${ti}-${i}`}
-              className="inline-block align-baseline"
-              style={{ width: "0.8ch" }}
-              aria-hidden
-            />
+            <span key={`sp-${sentenceKey}-${ti}-${i}`}>{"\u2005"}</span>
           );
         } else if (ch === "\t") {
+          // Represent a tab as multiple U+2005 spaces
           wsParts.push(
-            <span
-              key={`tb-${sentenceKey}-${ti}-${i}`}
-              className="inline-block align-baseline"
-              style={{ width: "2ch" }}
-              aria-hidden
-            />
+            <span key={`tb-${sentenceKey}-${ti}-${i}`}>
+              {"\u2005\u2005\u2005\u2005"}
+            </span>
           );
         } else if (ch === "\n") {
           wsParts.push(<br key={`br-${sentenceKey}-${ti}-${i}`} />);
