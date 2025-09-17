@@ -1,4 +1,4 @@
-import { MotionValue } from "framer-motion";
+import { MotionValue, AnimatePresence } from "framer-motion";
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -20,25 +20,40 @@ function renderText(text: string, pct: number): ReactNode {
     if (/^\s+$/.test(tok)) {
       // Preserve whitespace tokens as-is. With whitespace-pre-wrap on the container,
       // sequences of spaces and newlines render and wrap naturally between words.
-      return <span key={`ws-${ti}`}>{tok}</span>;
+      return <motion.span key={`ws-${ti}`}>{tok}</motion.span>;
     }
 
     // Non-whitespace token (a word or punctuation). Wrap in a no-wrap container
     // so the browser won't break lines in the middle of the word. Characters
     // inside still animate individually.
     return (
-      <span key={`w-${ti}`} className="inline-block whitespace-nowrap">
-        {tok.split("").map((char, ci) => (
-          <motion.span
-            key={`c-${ti}-${ci}`}
-            className="inline-block will-change-transform"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            {char}
-          </motion.span>
-        ))}
-      </span>
+      <AnimatePresence>
+        <motion.span
+          key={`w-${ti}`}
+          className="inline-block whitespace-nowrap"
+          exit={{ transition: { duration: 2 } }}
+        >
+          <AnimatePresence>
+            {tok.split("").map((char, ci) => (
+              <motion.span
+                key={`c-${ti}-${ci}`}
+                className="inline-block will-change-transform"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{
+                  opacity: 0,
+                  y: 40,
+                  rotate: Math.random() * 50 - 25,
+                  scale: 0.75,
+                  transition: { duration: 0.25 },
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </AnimatePresence>
+        </motion.span>
+      </AnimatePresence>
     );
   });
 }
