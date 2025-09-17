@@ -5,45 +5,88 @@ import { createPortal } from "react-dom";
 import { useScrollProgress } from "./ScrollAnimation";
 import { cn } from "~/lib/utils";
 
-function renderText(text: string, pct: number): ReactNode {
-  const maxLength = Math.floor(text.length * pct);
-  if (maxLength <= 0) return null;
+function renderText(text: string, pct: number, sentenceKey: number): ReactNode {
+  const cap = Math.floor(text.length * pct);
+  if (cap <= 0) return null;
 
-  // Take only the portion of text that should be visible at this progress
-  const visible = text.slice(0, Math.min(text.length, maxLength));
+  // Tokenize the FULL sentence so word wrappers remain mounted even when their
+  // current visible char count drops to 0. This lets inner characters animate
+  // out instead of being removed instantly when a whole word falls out of view.
+  const tokens = text.match(/(\s+|\S+)/g) ?? [text];
 
-  // Tokenize into whitespace and non-whitespace (words/punctuation) so we can
-  // prevent wrapping inside words but still allow wrapping at spaces
-  const tokens = visible.match(/(\s+|\S+)/g) ?? [visible];
-
+  let remaining = cap;
   return tokens.map((tok, ti) => {
+    const take = Math.max(0, Math.min(tok.length, remaining));
+    // Advance remaining by the full token length so only one token gets a partial take
+    remaining = Math.max(0, remaining - tok.length);
+
     if (/^\s+$/.test(tok)) {
-      // Preserve whitespace tokens as-is. With whitespace-pre-wrap on the container,
-      // sequences of spaces and newlines render and wrap naturally between words.
-      return <motion.span key={`ws-${ti}`}>{tok}</motion.span>;
+      // Render whitespace explicitly so spacing doesn't collapse or wrap oddly
+      const slice = tok.slice(0, take);
+      const wsParts: ReactNode[] = [];
+      for (let i = 0; i < slice.length; i++) {
+        const ch = slice[i];
+        if (ch === " ") {
+          // A single fixed-width space using the current mono font metrics
+          wsParts.push(
+            <span
+              key={`sp-${sentenceKey}-${ti}-${i}`}
+              className="inline-block align-baseline"
+              style={{ width: "0.8ch" }}
+              aria-hidden
+            />
+          );
+        } else if (ch === "\t") {
+          wsParts.push(
+            <span
+              key={`tb-${sentenceKey}-${ti}-${i}`}
+              className="inline-block align-baseline"
+              style={{ width: "2ch" }}
+              aria-hidden
+            />
+          );
+        } else if (ch === "\n") {
+          wsParts.push(<br key={`br-${sentenceKey}-${ti}-${i}`} />);
+        } else {
+          // Fallback for any other whitespace char
+          wsParts.push(
+            <span
+              key={`ws-${sentenceKey}-${ti}-${i}`}
+              className="inline-block"
+              aria-hidden
+            >
+              {ch}
+            </span>
+          );
+        }
+      }
+      return (
+        <span key={`ws-${sentenceKey}-${ti}`} className="inline">
+          {wsParts}
+        </span>
+      );
     }
 
-    // Non-whitespace token (a word or punctuation). Wrap in a no-wrap container
-    // so the browser won't break lines in the middle of the word. Characters
-    // inside still animate individually.
+    // Word/punctuation token: keep wrapper mounted always; only render up to 'take' chars.
     return (
-      <AnimatePresence>
-        <motion.span
-          key={`w-${ti}`}
-          className="inline-block whitespace-nowrap"
-          exit={{ transition: { duration: 2 } }}
-        >
-          <AnimatePresence>
-            {tok.split("").map((char, ci) => (
+      <span
+        key={`w-${sentenceKey}-${ti}`}
+        className="inline-block whitespace-nowrap"
+      >
+        <AnimatePresence>
+          {tok
+            .slice(0, take)
+            .split("")
+            .map((char, ci) => (
               <motion.span
-                key={`c-${ti}-${ci}`}
+                key={`c-${sentenceKey}-${ti}-${ci}`}
                 className="inline-block will-change-transform"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{
                   opacity: 0,
                   y: 40,
-                  rotate: Math.random() * 50 - 25,
+                  rotate: Math.random() * 200 - 100,
                   scale: 0.75,
                   transition: { duration: 0.25 },
                 }}
@@ -51,9 +94,8 @@ function renderText(text: string, pct: number): ReactNode {
                 {char}
               </motion.span>
             ))}
-          </AnimatePresence>
-        </motion.span>
-      </AnimatePresence>
+        </AnimatePresence>
+      </span>
     );
   });
 }
@@ -93,11 +135,31 @@ export default function Typewriter({
     if (index >= count) index = count - 1;
 
     const r = Math.min(1, Math.max(0, raw - index));
-    const sentence = sentences[index] || "";
+    const curSentence = sentences[index] || "";
 
     const SPEED = 1.5;
+    const curPct = Math.min(1, Math.max(0, r * SPEED));
 
-    return [renderText(sentence, r * SPEED), r * SPEED >= 1];
+    // Compute previous sentence contribution to smooth fast scroll direction changes
+    const prevIndex = Math.max(0, index - 1);
+    const prevSentence = sentences[prevIndex] || "";
+    const prevPct =
+      prevIndex === index ? 0 : Math.min(1, Math.max(0, 1 - curPct));
+
+    const layered = (
+      <span key={`blend-${index}`} className="relative block">
+        {prevPct > 0 && (
+          <span className="absolute inset-0 opacity-0">
+            {renderText(prevSentence, prevPct, prevIndex)}
+          </span>
+        )}
+        <span className="absolute inset-0">
+          {renderText(curSentence, curPct, index)}
+        </span>
+      </span>
+    );
+
+    return [layered, curPct >= 1];
   }, [pct.get(), text]);
 
   // Mount flag for safe portal usage (avoids SSR document reference errors)
