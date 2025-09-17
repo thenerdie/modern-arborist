@@ -74,14 +74,15 @@ function renderText(text: string, pct: number, sentenceKey: number): ReactNode {
               <motion.span
                 key={`c-${sentenceKey}-${ti}-${ci}`}
                 className="inline-block will-change-transform"
-                initial={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{
                   opacity: 0,
                   y: 40,
+                  x: Math.random() * 20 - 10,
                   rotate: Math.random() * 200 - 100,
-                  scale: 0.75,
-                  transition: { duration: 0.25 },
+                  scale: 0.25,
+                  transition: { duration: 0.45 },
                 }}
               >
                 {char}
