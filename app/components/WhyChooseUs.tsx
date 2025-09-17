@@ -27,11 +27,11 @@ export function WhyChooseUs() {
           Modern Arborist blends scientific expertise with precision field work
           to care for your trees responsibly.
         </p>
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <ul className="mt-12 grid gap-2 md:gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {points.map((p) => (
             <li
               key={p.text}
-              className="group rounded-xl bg-white/10 backdrop-blur-md ring-1 ring-inset ring-white/15 px-4 py-6 flex flex-col items-center text-sm font-medium shadow transition transform-gpu hover:-translate-y-2 hover:scale-[1.04] hover:bg-white/15 hover:ring-white/30 hover:shadow-xl dark:ring-white/15 dark:hover:ring-white/30"
+              className="group rounded-xl bg-white/10 backdrop-blur-md ring-1 ring-inset ring-white/15 px-4 py-6 flex gap-2 md:flex-col items-center text-sm font-medium shadow transition transform-gpu hover:-translate-y-2 hover:scale-[1.04] hover:bg-white/15 hover:ring-white/30 hover:shadow-xl dark:ring-white/15 dark:hover:ring-white/30"
             >
               <span className="text-2xl mb-2 drop-shadow">{p.icon}</span>
               <span className="text-green-50 group-hover:text-white text-center leading-snug">

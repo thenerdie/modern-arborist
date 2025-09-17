@@ -34,7 +34,7 @@ export default function Services() {
       <PreservationSection />
       <CertificationsSection />
       <TreeRemovalSection />
-      {/* <EmergencyServicesSection /> */}
+      <EmergencyServicesSection />
       {/* <StumpGrindingSection /> */}
     </div>
   );

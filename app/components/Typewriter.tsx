@@ -2,6 +2,7 @@ import { MotionValue } from "framer-motion";
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { useScrollProgress } from "./ScrollAnimation";
 import { cn } from "~/lib/utils";
 
 function truncateText(text: string, pct: number) {
@@ -22,6 +23,8 @@ export default function Typewriter({
   pct: MotionValue<number>;
   mountPromptTo?: string;
 }) {
+  const progress = useScrollProgress();
+
   const sentences = useMemo(() => {
     return text.split(/(?<=[.!?])\s+/);
   }, [text]);
@@ -57,7 +60,10 @@ export default function Typewriter({
 
   const prompt = (
     <motion.span
-      className="pointer-events-none select-none text-xs md:text-sm font-medium fixed z-50 left-1/2 -translate-x-1/2 bottom-4 md:bottom-8 text-gray-500 dark:text-gray-400 tracking-wide flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 dark:bg-gray-900/60 backdrop-blur-md ring-1 ring-black/5 dark:ring-white/10 shadow-lg"
+      className={cn(
+        "pointer-events-none select-none text-xs md:text-sm font-medium z-50 left-1/2 -translate-x-1/2 bottom-4 md:bottom-8 text-gray-500 dark:text-gray-400 tracking-wide flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 dark:bg-gray-900/60 backdrop-blur-md ring-1 ring-black/5 dark:ring-white/10 shadow-lg",
+        progress.get() >= 1 ? "absolute" : "fixed"
+      )}
       initial={{ y: 24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 320, damping: 26, delay: 0.25 }}
