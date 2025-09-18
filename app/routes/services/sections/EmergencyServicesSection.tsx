@@ -13,7 +13,7 @@ function EmergencyServicesContent() {
 
   return (
     <motion.div className="relative z-10 max-w-4xl space-y-6 will-change-transform">
-      <p className="text-base md:text-4xl text-red-200 leading-relaxed text-shadow-lg">
+      <p className="text-3xl md:text-4xl text-red-200 leading-relaxed text-shadow-lg">
         <Typewriter pct={typePct}>
           Storms and unexpected events can leave trees damaged, dangerous, or
           blocking access to your property. When that happens, you need quick,
@@ -29,11 +29,14 @@ function EmergencyServicesContent() {
 export default function EmergencyServicesSection() {
   return (
     <Section className="text-left bg-red-700 dark:bg-red-900" height={20}>
-      {() => (
+      {(p: number) => (
         <>
           <ScrubbableVideo
             src="scrub_gop10.mp4"
-            className="pointer-events-none absolute inset-0 object-cover w-full h-full opacity-30 z-0"
+            className="pointer-events-none absolute inset-0 object-cover w-full h-full opacity-50 z-0"
+            style={{
+              clipPath: `circle(${p * 400}% at 30% 30%)`,
+            }}
           />
           <EmergencyServicesContent />
         </>

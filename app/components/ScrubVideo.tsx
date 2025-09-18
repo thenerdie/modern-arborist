@@ -7,9 +7,11 @@ import { cn } from "~/lib/utils";
 export default function ScrubbableVideo({
   src,
   className,
+  style,
 }: {
   src: string;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const progress = useScrollProgress(); // MotionValue in [0,1]
   const smooth = useSpring(progress, { stiffness: 140, damping: 28 });
@@ -103,6 +105,7 @@ export default function ScrubbableVideo({
     <video
       ref={videoRef}
       className={cn("w-full h-auto", className)}
+      style={style}
       playsInline
       muted
       // we control loading manually

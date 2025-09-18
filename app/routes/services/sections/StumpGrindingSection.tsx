@@ -47,7 +47,11 @@ function StumpGrindingContent() {
 
 export default function StumpGrindingSection() {
   return (
-    <Section id="stump-grinding" className="text-left" height={20}>
+    <Section
+      id="stump-grinding"
+      className="text-left bg-gradient-to-br from-amber-900 via-amber-700 to-amber-600"
+      height={20}
+    >
       {() => (
         <>
           <Progress />
