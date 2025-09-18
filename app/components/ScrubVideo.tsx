@@ -17,67 +17,86 @@ export default function ScrubbableVideo({
   const [duration, setDuration] = useState(0);
   const [ready, setReady] = useState(false);
   const blobUrlRef = useRef<string | null>(null);
+  // Keep track of last rendered frame index to avoid excessive decodes
+  const lastFrameIndexRef = useRef<number>(-1);
+  const assumedFpsRef = useRef<number>(30); // fallback if we can't detect
+  const detectedRef = useRef(false);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    const onMeta = () => {
-      if (!v.duration || isNaN(v.duration)) return; // wait for real metadata
-      setDuration(v.duration || 0);
-    };
-    const onCanPlayThrough = () => {
-      setReady(true);
-    };
-    v.addEventListener("loadedmetadata", onMeta);
-    v.addEventListener("canplaythrough", onCanPlayThrough, { once: true });
-
-    // Freeze playback; we’ll drive currentTime manually
-    v.pause();
-    v.playbackRate = 0;
-
-    // If metadata already there (cache), capture immediately
-    onMeta();
-
-    // Fallback: after short delay, fetch whole file -> blob to guarantee seekable buffer (esp Safari/iOS)
     let aborted = false;
-    const fallbackTimer = setTimeout(async () => {
-      if (ready || aborted) return;
+    const controller = new AbortController();
+
+    // Always do a full fetch -> blob for perfectly seekable buffer
+    (async () => {
       try {
-        const res = await fetch(src, { cache: "force-cache" });
+        const res = await fetch(src, {
+          cache: "force-cache",
+          signal: controller.signal,
+        });
         const blob = await res.blob();
         if (aborted) return;
         const url = URL.createObjectURL(blob);
         blobUrlRef.current = url;
-        v.src = url; // swap to fully local blob
+        v.src = url;
         v.load();
         v.onloadedmetadata = () => {
-          onMeta();
+          if (!v.duration || isNaN(v.duration)) return;
+          setDuration(v.duration);
           setReady(true);
         };
-      } catch {
-        // swallow; network errors will just leave normal streaming path
+      } catch (e) {
+        if ((e as any)?.name === "AbortError") return;
+        // Fallback: use original src if fetch fails
+        v.src = src;
+        v.onloadedmetadata = () => {
+          if (!v.duration || isNaN(v.duration)) return;
+          setDuration(v.duration);
+          setReady(true);
+        };
       }
-    }, 800);
+    })();
+
+    v.pause();
+    v.playbackRate = 0;
 
     return () => {
       aborted = true;
-      clearTimeout(fallbackTimer);
-      v.removeEventListener("loadedmetadata", onMeta);
-      v.removeEventListener("canplaythrough", onCanPlayThrough);
+      controller.abort();
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
         blobUrlRef.current = null;
       }
     };
-  }, [src, ready]);
+  }, [src]);
 
   useMotionValueEvent(smooth, "change", (p) => {
     const v = videoRef.current;
     if (!v || !duration) return;
-    // Clamp for safety
-    const t = Math.max(0, Math.min(duration, p * duration));
-    v.currentTime = t;
+
+    // Attempt to infer FPS once (after ready). Some browsers expose it; most don't, so we infer by duration/readyState.
+    if (!detectedRef.current && ready) {
+      // Heuristic: if duration < 8s and naturalWidth exists, assume 30; else 24 or 60 for longer clips could be tested.
+      // Allow caller later to override via data attribute if needed.
+      if (duration <= 12) assumedFpsRef.current = 30;
+      else assumedFpsRef.current = 24;
+      detectedRef.current = true;
+    }
+
+    const fps = assumedFpsRef.current;
+    const targetTime = Math.max(0, Math.min(duration, p * duration));
+    // Quantize to frame boundary
+    const frameIndex = Math.round(targetTime * fps);
+    if (frameIndex === lastFrameIndexRef.current) return; // same frame -> skip
+    lastFrameIndexRef.current = frameIndex;
+    const quantizedTime = frameIndex / fps;
+
+    // Only seek if significant delta to avoid micro adjustments
+    if (Math.abs(v.currentTime - quantizedTime) > 0.005) {
+      v.currentTime = quantizedTime;
+    }
   });
 
   return (
@@ -86,20 +105,9 @@ export default function ScrubbableVideo({
       className={cn("w-full h-auto", className)}
       playsInline
       muted
-      preload="auto"
-      // Provide both; browsers will pick the first they support
-      // You can also use <source> children if you prefer
-      src={src}
+      // we control loading manually
+      preload="metadata"
       crossOrigin="anonymous"
-      onCanPlay={() => {
-        videoRef.current?.pause();
-        setReady(true);
-      }}
-      onLoadedMetadata={() => {
-        const v = videoRef.current;
-        if (!v) return;
-        if (v.duration && !isNaN(v.duration)) setDuration(v.duration);
-      }}
       data-ready={ready ? "true" : "false"}
     />
   );
