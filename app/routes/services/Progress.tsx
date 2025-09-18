@@ -14,6 +14,8 @@ export default function Progress() {
     setPercent(v * 100);
   });
 
+  if (progress.get() <= 0 || progress.get() >= 1) return null;
+
   return (
     <>
       <span
