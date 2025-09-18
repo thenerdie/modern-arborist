@@ -10,6 +10,8 @@ function EmergencyServicesContent() {
   const p = useScrollProgress();
 
   const typePct = useTransform(p, [0, 0.6], [0, 1]);
+  const quoteOpacity = useTransform(p, [0.7, 0.9], [0, 1]);
+  const quoteY = useTransform(p, [0.7, 0.9], [20, 0]);
 
   return (
     <motion.div className="relative z-10 max-w-4xl space-y-6 will-change-transform">
@@ -21,7 +23,16 @@ function EmergencyServicesContent() {
           hazardous limbs and downed trees, restoring safety and peace of mind.
         </Typewriter>
       </p>
-      <GetAQuote text="Request emergency help" />
+      <motion.b
+        className="block pr-4 text-emerald-200 font-semibold"
+        style={{ opacity: quoteOpacity, y: quoteY }}
+      >
+        We respond fast for your peace of mind.
+      </motion.b>
+      <GetAQuote
+        style={{ opacity: quoteOpacity.get() }}
+        text="Request emergency help"
+      />
     </motion.div>
   );
 }
