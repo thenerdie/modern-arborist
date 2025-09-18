@@ -1,6 +1,6 @@
 {
   "include": [
-    // "**/*",
+    "**/*",
     "**/.server/**/*",
     "**/.client/**/*",
     ".react-router/types/**/*"
@@ -9,7 +9,7 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["node", "vite/client", "remotion"],
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "rootDirs": [".", "./.react-router/types"],
