@@ -36,7 +36,7 @@ export default function Progress() {
         <div
           className="absolute bg-gray-700 h-full"
           style={{ width: `${percent}%` }}
-        ></div>
+        />
       </motion.div>
     </>
   );
