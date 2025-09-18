@@ -43,7 +43,7 @@ export default function EmergencyServicesSection() {
       {(p: number) => (
         <>
           <ScrubbableVideo
-            src="scrub_gop10.mp4"
+            src="/scrub_gop10.mp4"
             className="pointer-events-none absolute inset-0 object-cover w-full h-full opacity-50 z-0"
             style={{
               clipPath: `circle(${p * 400}% at 30% 30%)`,
