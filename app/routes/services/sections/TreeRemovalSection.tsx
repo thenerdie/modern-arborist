@@ -6,6 +6,7 @@ import { useScrollProgress } from "~/components/ScrollAnimation";
 
 import Typewriter from "~/components/Typewriter";
 import GetAQuote from "~/components/GetAQuote";
+import Progress from "../Progress";
 
 function TreeRemovalContent() {
   const p = useScrollProgress();
@@ -44,7 +45,14 @@ function TreeRemovalContent() {
 export function TreeRemovalSection() {
   return (
     <Section id="tree-removal" className="text-left" height={25}>
-      {() => <TreeRemovalContent />}
+      {() => {
+        return (
+          <>
+            <Progress />
+            <TreeRemovalContent />
+          </>
+        );
+      }}
     </Section>
   );
 }
