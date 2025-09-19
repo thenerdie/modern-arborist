@@ -3,30 +3,49 @@ import { useSpring, useMotionValueEvent } from "framer-motion";
 import { useScrollProgress } from "~/components/ScrollAnimation";
 
 import { cn } from "~/lib/utils";
+import { useLowPerfMode } from "~/utils/perf";
 
 export default function ScrubbableVideo({
   src,
   className,
   style,
+  degradeOnLowPerf = true,
+  poster,
 }: {
   src: string;
   className?: string;
   style?: React.CSSProperties;
+  degradeOnLowPerf?: boolean;
+  poster?: string;
 }) {
   const progress = useScrollProgress(); // MotionValue in [0,1]
   const smooth = useSpring(progress, { stiffness: 140, damping: 28 });
   const videoRef = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState(0);
   const [ready, setReady] = useState(false);
+  const lowPerf = useLowPerfMode();
   const blobUrlRef = useRef<string | null>(null);
   // Keep track of last rendered frame index to avoid excessive decodes
   const lastFrameIndexRef = useRef<number>(-1);
   const assumedFpsRef = useRef<number>(30); // fallback if we can't detect
   const detectedRef = useRef(false);
 
+  const effectiveScrubDisabled = degradeOnLowPerf && lowPerf;
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    if (effectiveScrubDisabled) {
+      // Simplified path: just use native video element & streaming source
+      v.src = src;
+      v.onloadedmetadata = () => {
+        if (!v.duration || isNaN(v.duration)) return;
+        setDuration(v.duration);
+        setReady(true);
+      };
+      return;
+    }
 
     let aborted = false;
     const controller = new AbortController();
@@ -76,7 +95,7 @@ export default function ScrubbableVideo({
 
   useMotionValueEvent(smooth, "change", (p) => {
     const v = videoRef.current;
-    if (!v || !duration) return;
+    if (!v || !duration || effectiveScrubDisabled) return;
 
     // Attempt to infer FPS once (after ready). Some browsers expose it; most don't, so we infer by duration/readyState.
     if (!detectedRef.current && ready) {
@@ -108,10 +127,11 @@ export default function ScrubbableVideo({
       style={style}
       playsInline
       muted
-      // we control loading manually
-      preload="metadata"
+      preload={effectiveScrubDisabled ? "auto" : "metadata"}
       crossOrigin="anonymous"
       data-ready={ready ? "true" : "false"}
+      poster={poster}
+      data-low-perf={effectiveScrubDisabled ? "true" : undefined}
     />
   );
 }

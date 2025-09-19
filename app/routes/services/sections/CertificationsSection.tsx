@@ -33,6 +33,8 @@ function CertificationBadge({
         }`}
         initial={{ filter: "saturate(0.9)" }}
         whileHover={{ filter: "saturate(1.05)" }}
+        loading="lazy"
+        decoding="async"
       />
       <div className="relative z-[1]">
         <h3 className="text-base md:text-lg font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-700 dark:from-emerald-200 dark:via-green-200 dark:to-lime-200">

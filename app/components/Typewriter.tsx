@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useScrollProgress } from "./ScrollAnimation";
 import { cn } from "~/lib/utils";
+import { useLowPerfMode } from "~/utils/perf";
 
 function renderText(text: string, pct: number, sentenceKey: number): ReactNode {
   const cap = Math.floor(text.length * pct);
@@ -99,13 +100,17 @@ export default function Typewriter({
   className,
   pct,
   mountPromptTo,
+  optimizeForLowPerf = true,
 }: {
   children: any;
   className?: string;
   pct: MotionValue<number>;
   mountPromptTo?: string;
+  /** Whether to auto-degrade animation on low-end devices */
+  optimizeForLowPerf?: boolean;
 }) {
   const progress = useScrollProgress();
+  const lowPerf = useLowPerfMode();
 
   const sentences = useMemo(() => {
     return text.split(/(?<=[.!?])\s+/);
@@ -119,6 +124,7 @@ export default function Typewriter({
     );
   }, [text]);
 
+  // Standard (animated) rendering path
   const [computedText, endOfSentence] = useMemo(() => {
     const tProgress = pct.get();
 
@@ -177,6 +183,53 @@ export default function Typewriter({
     </motion.span>
   );
 
+  // Low performance simplified path: a single span with substring, no per-char elements
+  if (optimizeForLowPerf && lowPerf) {
+    const tProgress = pct.get();
+    const count = sentences.length || 1;
+    const raw = Math.max(0, Math.min(1, tProgress)) * count;
+    let index = Math.floor(raw);
+    if (index >= count) index = count - 1;
+    const r = Math.min(1, Math.max(0, raw - index));
+    const curSentence = sentences[index] || "";
+    const SPEED = 3; // keep same pacing intention
+    const curPct = Math.min(1, Math.max(0, r * SPEED));
+
+    // Build output: all previous sentences fully + partial current sentence
+    const previous = sentences.slice(0, index).join(" ");
+    const partialLen = Math.floor(curSentence.length * curPct);
+    const partial = curSentence.slice(0, partialLen);
+    // Add a trailing space between prior and current if needed
+    const combined = previous
+      ? previous + (partial.length ? " " + partial : "")
+      : partial;
+    const isEnd = index === count - 1 && curPct >= 1;
+    return (
+      <span
+        className={cn(
+          "relative font-mono font-bold inline-block align-top",
+          className
+        )}
+        data-low-perf
+      >
+        <span aria-hidden className="invisible">
+          {longestSentence}
+        </span>
+        <span className="absolute inset-0 whitespace-pre-wrap transition-opacity">
+          {combined}
+        </span>
+        {mounted &&
+          isEnd &&
+          createPortal(
+            prompt,
+            mountPromptTo
+              ? document.getElementById(mountPromptTo)!
+              : document.body
+          )}
+      </span>
+    );
+  }
+
   return (
     <span
       className={`relative font-mono font-bold inline-block align-top ${className}`}
@@ -187,7 +240,6 @@ export default function Typewriter({
       <span className="absolute inset-0 whitespace-pre-wrap">
         {computedText}
       </span>
-      {/* The scrolling prompt is portaled so transforms on ancestors don't affect fixed positioning */}
       {mounted &&
         endOfSentence &&
         createPortal(

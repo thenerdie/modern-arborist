@@ -39,6 +39,8 @@ function PreservationContent() {
         alt="A sun shining"
         className="absolute inset-0 object-cover w-60 h-60 will-change-transform"
         style={{ transform: sunTransform }}
+        loading="lazy"
+        decoding="async"
       />
       <motion.div
         className="relative z-10 max-w-4xl space-y-2 will-change-transform"
