@@ -40,11 +40,10 @@ function EmergencyServicesContent() {
 }
 
 export default function EmergencyServicesSection() {
-  // We must derive transforms from the progress inside the Section's render cycle
+  // Use render prop so scroll context is available before deriving transforms.
   return (
-    <Section className="text-left bg-red-700 dark:bg-red-900" height={12}>
-      {(progress: number) => {
-        // Create a transient motion value via hook usingScrollProgress (already provided by Section context)
+    <Section className="text-left bg-red-700 dark:bg-red-900" height={20}>
+      {() => {
         const mv = useScrollProgress();
         const clip = useTransform(mv, (v) => `circle(${v * 400}% at 30% 30%)`);
         return (
