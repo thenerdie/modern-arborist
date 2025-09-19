@@ -39,7 +39,7 @@ function EmergencyServicesContent() {
 
 export default function EmergencyServicesSection() {
   return (
-    <Section className="text-left bg-red-700 dark:bg-red-900" height={20}>
+    <Section className="text-left bg-red-700 dark:bg-red-900" height={12}>
       {(p: number) => (
         <>
           <ScrubbableVideo

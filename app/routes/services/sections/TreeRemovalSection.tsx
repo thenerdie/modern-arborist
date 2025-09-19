@@ -44,7 +44,7 @@ function TreeRemovalContent() {
 
 export function TreeRemovalSection() {
   return (
-    <Section id="tree-removal" className="text-left" height={25}>
+    <Section id="tree-removal" className="text-left" height={13}>
       {() => {
         return (
           <>

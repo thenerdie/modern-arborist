@@ -131,7 +131,7 @@ export default function Typewriter({
     const r = Math.min(1, Math.max(0, raw - index));
     const curSentence = sentences[index] || "";
 
-    const SPEED = 1.5;
+    const SPEED = 3;
     const curPct = Math.min(1, Math.max(0, r * SPEED));
 
     // Compute previous sentence contribution to smooth fast scroll direction changes

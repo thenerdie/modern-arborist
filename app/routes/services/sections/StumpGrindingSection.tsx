@@ -17,7 +17,7 @@ function StumpGrindingContent() {
     <motion.div className="relative z-10 max-w-4xl space-y-8 will-change-transform">
       <Typewriter
         pct={typePct}
-        className="relative text-3xl tracking-tight text-white/80 leading-snug text-shadow-md"
+        className="relative text-2xl md:text-4xl tracking-tight text-white/80 leading-snug text-shadow-md"
         mountPromptTo="stump-grinding"
       >
         Stump grinding is the final step that lets your landscape move forward.
@@ -50,7 +50,7 @@ export default function StumpGrindingSection() {
     <Section
       id="stump-grinding"
       className="text-left bg-gradient-to-br from-amber-900 via-amber-700 to-amber-600"
-      height={20}
+      height={10}
     >
       {() => (
         <>
