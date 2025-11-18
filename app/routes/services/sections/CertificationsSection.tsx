@@ -46,7 +46,7 @@ function CertificationBadge({
 
 function CertificationsContent() {
   return (
-    <div className="relative z-10 max-w-3xl space-y-6">
+    <div className="relative z-10 max-w-3xl mx-auto space-y-6">
       <motion.h2
         className="text-center text-3xl md:text-5xl font-bold text-foreground dark:text-green-300"
         initial={{ opacity: 0, y: 12 }}
