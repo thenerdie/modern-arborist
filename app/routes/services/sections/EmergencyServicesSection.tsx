@@ -1,68 +1,43 @@
 import Section from "../Section";
 
-import { motion, useTransform } from "framer-motion";
-import { useScrollProgress } from "~/components/ScrollAnimation";
-import Typewriter from "~/components/Typewriter";
+import { motion } from "framer-motion";
 import GetAQuote from "~/components/GetAQuote";
-import ScrubbableVideo from "~/components/ScrubVideo";
-import { useLowPerfMode } from "~/utils/perf";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+};
 
 function EmergencyServicesContent() {
-  const p = useScrollProgress();
-  const lowPerf = useLowPerfMode();
-
-  const typePct = useTransform(p, [0, 0.6], [0, 1]);
-  const quoteOpacity = useTransform(p, [0.7, 0.9], [0, 1]);
-  const quoteY = useTransform(p, [0.7, 0.9], [20, 0]);
-
   return (
-    <motion.div className="relative z-10 max-w-4xl space-y-6 will-change-transform">
-      <p className="text-3xl md:text-4xl text-red-200 leading-relaxed text-shadow-lg">
-        <Typewriter pct={typePct} optimizeForLowPerf>
-          Storms and unexpected events can leave trees damaged, dangerous, or
-          blocking access to your property. When that happens, you need quick,
-          professional help. We provide emergency tree services to safely remove
-          hazardous limbs and downed trees, restoring safety and peace of mind.
-        </Typewriter>
+    <motion.div
+      className="relative z-10 max-w-4xl space-y-6 text-white"
+      initial={fadeInUp.initial}
+      whileInView={fadeInUp.animate}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      <h2 className="text-3xl md:text-4xl font-semibold">
+        Emergency tree services when storms hit.
+      </h2>
+      <p className="text-base md:text-lg text-white/80 leading-relaxed">
+        Storms and unexpected events can leave trees damaged, dangerous, or
+        blocking access to your property. When that happens, you need quick,
+        professional help. We provide emergency tree services to safely remove
+        hazardous limbs and downed trees, restoring safety and peace of mind.
       </p>
-      <motion.b
-        className="block pr-4 text-emerald-200 font-semibold"
-        style={{ opacity: quoteOpacity, y: quoteY }}
-      >
+      <p className="text-emerald-200 font-semibold">
         We respond fast for your peace of mind.
-      </motion.b>
-      <GetAQuote
-        style={{ opacity: quoteOpacity.get() }}
-        text={lowPerf ? "Get emergency help" : "Request emergency help"}
-      />
+      </p>
+      <GetAQuote text="Request emergency help" />
     </motion.div>
   );
 }
 
 export default function EmergencyServicesSection() {
-  // Use render prop so scroll context is available before deriving transforms.
   return (
-    <Section className="text-left bg-red-700 dark:bg-red-900" height={20}>
-      {() => {
-        const mv = useScrollProgress();
-        const clip = useTransform(mv, (v) => `circle(${v * 400}% at 30% 30%)`);
-        return (
-          <>
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 w-full h-full opacity-50 z-0"
-              style={{ clipPath: clip }}
-            >
-              <ScrubbableVideo
-                src="scrub_gop10.mp4"
-                className="pointer-events-none absolute inset-0 object-cover w-full h-full"
-                degradeOnLowPerf
-              />
-            </motion.div>
-            <EmergencyServicesContent />
-          </>
-        );
-      }}
+    <Section className="text-left bg-red-700 dark:bg-red-900">
+      <EmergencyServicesContent />
     </Section>
   );
 }

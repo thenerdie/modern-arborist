@@ -1,38 +1,25 @@
-import ScrollAnimation, {
-  useScrollProgress,
-} from "../../components/ScrollAnimation";
+import type React from "react";
 
 import { cn } from "~/lib/utils";
 
-type SectionChild = React.ReactNode | ((progress: number) => React.ReactNode);
-
-export default function Section({
-  id,
-  className,
-  height,
-  children,
-}: {
+type SectionProps = {
   id?: string;
-  children: SectionChild;
+  children: React.ReactNode;
   className?: string;
+  /** Retained for backwards compatibility but no longer used */
   height?: number;
-}) {
+};
+
+export default function Section({ id, className, children }: SectionProps) {
   return (
-    <ScrollAnimation
+    <section
       id={id}
-      heightMultiplier={height ? height : 2}
-      render={(progress: number) => (
-        <div
-          className={cn(
-            "relative bg-gray-900 overflow-hidden flex items-center justify-center min-h-screen px-6",
-            className
-          )}
-        >
-          {typeof children === "function"
-            ? (children as (p: number) => React.ReactNode)(progress)
-            : children}
-        </div>
+      className={cn(
+        "relative flex items-center justify-center min-h-[70vh] px-6 py-16",
+        className
       )}
-    />
+    >
+      <div className="w-full max-w-5xl">{children}</div>
+    </section>
   );
 }

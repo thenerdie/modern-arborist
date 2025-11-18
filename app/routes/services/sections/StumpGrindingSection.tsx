@@ -1,45 +1,41 @@
 import Section from "../Section";
-import { motion, useTransform } from "framer-motion";
-import { useScrollProgress } from "~/components/ScrollAnimation";
-import Typewriter from "~/components/Typewriter";
+
+import { motion } from "framer-motion";
 import GetAQuote from "~/components/GetAQuote";
-import Progress from "../Progress";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+};
 
 function StumpGrindingContent() {
-  const p = useScrollProgress();
-
-  // Match TreeRemoval timing philosophy: long typewriter, late emphasis reveal
-  const emphasisOpacity = useTransform(p, [0.8, 0.9], [0, 1]);
-  const emphasisY = useTransform(p, [0.8, 0.9], [40, 0]);
-  const typePct = useTransform(p, [0, 0.8], [0, 1]);
-
   return (
-    <motion.div className="relative z-10 max-w-4xl space-y-8 will-change-transform">
-      <Typewriter
-        pct={typePct}
-        className="relative text-2xl md:text-4xl tracking-tight text-white/80 leading-snug text-shadow-md"
-        mountPromptTo="stump-grinding"
-      >
-        Stump grinding is the final step that lets your landscape move forward.
-        Leftover stumps can harbor pests, create trip hazards, and block
-        replanting or hardscape plans. We grind each stump below grade so the
-        area can be reclaimed — whether you want turf, new plantings, mulch
-        beds, or a fresh design. Our process is clean and contained: we protect
-        adjacent root zones, manage chips, and leave you with a site that’s
-        actually ready for what’s next instead of a half-finished project.
-      </Typewriter>
-
-      <motion.b
-        className="block pr-4 text-emerald-200 font-semibold"
-        style={{ opacity: emphasisOpacity, y: emphasisY }}
-      >
-        Clean finish. Clear future.
-      </motion.b>
-
+    <motion.div
+      className="space-y-6 text-white"
+      initial={fadeInUp.initial}
+      whileInView={fadeInUp.animate}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      <h2 className="text-3xl md:text-4xl font-semibold">
+        Stump grinding for a clean finish.
+      </h2>
+      <p className="text-base md:text-lg text-white/80 leading-relaxed">
+        Stump grinding is the final step that lets your landscape move
+        forward. Leftover stumps can harbor pests, create trip hazards, and
+        block replanting or hardscape plans. We grind each stump below grade
+        so the area can be reclaimed—whether you want turf, new plantings,
+        mulch beds, or a fresh design.
+      </p>
+      <p className="text-base md:text-lg text-white/80 leading-relaxed">
+        Our process is clean and contained: we protect adjacent root zones,
+        manage chips, and leave you with a site that is actually ready for
+        what is next, instead of a half-finished project.
+      </p>
+      <p className="text-emerald-200 font-semibold">Clean finish. Clear future.</p>
       <GetAQuote
         text="Get a stump grinding quote"
         className="md:mt-4 md:text-left text-center"
-        style={{ opacity: emphasisOpacity.get() }}
       />
     </motion.div>
   );
@@ -50,14 +46,8 @@ export default function StumpGrindingSection() {
     <Section
       id="stump-grinding"
       className="text-left bg-gradient-to-br from-amber-900 via-amber-700 to-amber-600"
-      height={10}
     >
-      {() => (
-        <>
-          <Progress />
-          <StumpGrindingContent />
-        </>
-      )}
+      <StumpGrindingContent />
     </Section>
   );
 }

@@ -1,7 +1,6 @@
 import Section from "../Section";
 
-import { motion, useTransform } from "framer-motion";
-import { useScrollProgress } from "~/components/ScrollAnimation";
+import { motion } from "framer-motion";
 
 function CertificationBadge({
   title,
@@ -40,35 +39,38 @@ function CertificationBadge({
         <h3 className="text-base md:text-lg font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-700 dark:from-emerald-200 dark:via-green-200 dark:to-lime-200">
           {title}
         </h3>
-        {/* <div className="mt-1 h-px w-10 mx-auto bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent dark:via-emerald-300/40" /> */}
       </div>
     </motion.div>
   );
 }
 
 function CertificationsContent() {
-  const p = useScrollProgress();
-  const containerOpacity = useTransform(p, [0.5, 0.8], [0, 1]);
-  const headingOpacity = useTransform(p, [0, 0.5], [0, 1]);
-
   return (
     <div className="relative z-10 max-w-3xl space-y-6">
       <motion.h2
         className="text-center text-3xl md:text-5xl font-bold text-foreground dark:text-green-300"
-        style={{ opacity: headingOpacity }}
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
         We're certified. And insured.
       </motion.h2>
       <motion.h1
         className="text-center text-lg md:text-2xl font-semibold text-green-100"
-        style={{ opacity: containerOpacity }}
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
       >
         We've got the accolades so you have peace of mind.
       </motion.h1>
-      {/* Using flex-wrap so that an incomplete final row is centered. */}
       <motion.div
         className="flex flex-wrap justify-center gap-3 pt-2 md:gap-10 md:pt-5"
-        style={{ opacity: containerOpacity }}
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
       >
         <CertificationBadge
           title="ISA Certified Arborists"
@@ -95,7 +97,7 @@ export default function CertificationsSection() {
       className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-shadow-lg"
       height={5}
     >
-      {() => <CertificationsContent />}
+      <CertificationsContent />
     </Section>
   );
 }
